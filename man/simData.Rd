@@ -26,7 +26,8 @@ simData(
 This argument should be a numeric vector.}
 
 \item{X}{The covariates matrix for patients.
-This argument should be a matrix which records the covariate vector of subject $i$ in row i.}
+This argument should be a matrix which records the covariate vector of
+subject $i$ in row i.}
 
 \item{kappaCoef}{The coefficents of upper reflection barrier.
 This argument should be a numeric vector.}
@@ -53,8 +54,8 @@ to round the generated gap times or not round.}
 to return the generated gap times or calender time.}
 
 \item{event_num}{The number of simulated random gap times for one patients.
-Only the cumulative random gap times smaller the follow up time are saved as output.
-This argument should be a numeric value.}
+Only the cumulative random gap times smaller the follow up time are
+saved as output. This argument should be a numeric value.}
 }
 \description{
 The function simData generates simulated recurrent events from

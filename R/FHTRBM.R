@@ -22,69 +22,76 @@ NULL
 
 #' @title The First Hitting Time Distribution
 #'
-#' @name FHT
+#' @name FHTRBM
 #' @description    Density, distribution, quantile, and random number
 #'     generation function
-#' @param t        random values; vector
+#' @param x        random values; vector
 #' @param x0       starting point; scalar
 #' @param nu       lower barrier; scalar
 #' @param kappa    upper reflection barrier; scalar
 #' @param sigma    volatility; scalar
+#' @param log      default is FALSE
 #' @examples
-#' dFHT(1, 10, 3.9, 20, 3)
-#' dFHT(c(1:5), 10, 3.9, 20, 3)
+#' dFHTRBM(1, 10, 3.9, 20, 3)
+#' dFHTRBM(c(1:5), 10, 3.9, 20, 3)
+#'
 #' @export
-dFHT <- function(t, x0, nu, kappa, sigma){
-  return(dFHT_c(t, x0, nu, kappa, sigma))
+dFHTRBM <- function(x, x0, nu, kappa, sigma, log = FALSE){
+  denst <- dFHT_c(t = x, x0, nu, kappa, sigma)
+  if (log) denst <- log(denst)
+  return(denst)
 }
 
-#' @rdname FHT
+#' @rdname FHTRBM
 #'
-#' @param t        random values; vector
+#' @param x        random values; vector
 #' @export
 #' @examples
-#' pFHT(1, 10, 3.9, 20, 3)
-#' pFHT(c(1:5), 10, 3.9, 20, 3)
-pFHT <- function(t, x0, nu, kappa, sigma){
-  return(pFHT_c(t, x0, nu, kappa, sigma))
+#' pFHTRBM(1, 10, 3.9, 20, 3)
+#' pFHTRBM(c(1:5), 10, 3.9, 20, 3)
+pFHTRBM <- function(x, x0, nu, kappa, sigma){
+  return(pFHT_c(t = x, x0, nu, kappa, sigma))
 }
 
 
 qFHT_scale <- function(p, x0, nu, kappa, sigma){
   obj_quantile <- function(t){
-    return(pFHT(t, x0, nu, kappa, sigma) - p)
+    return(pFHTRBM(t, x0, nu, kappa, sigma) - p)
   }
   t_q <- safeUroot(obj_quantile, c(0, .Machine$integer.max))$root
   return(t_q)
 }
 
-#' @rdname FHT
+#' @rdname FHTRBM
 #'
 #' @param p        vector of probabilities
 #' @export
-qFHT <- Vectorize(FUN = qFHT_scale)
+qFHTRBM <- Vectorize(FUN = qFHT_scale)
 
 
-#' @rdname FHT
+#' @rdname FHTRBM
 #'
-#' @param n           number of observations
-#' @param k           number of pieces to be included in proposal, default k = 3
-#' @param qTail       the user-defined qth quantile for the tail, default q = 0.95
+#' @param n       number of observations
+#' @param k       number of pieces to be included in proposal, default k = 3
+#' @param qTail   the user-defined qth quantile for the tail, default q = 0.95
 #' @export
-rFHT <- function(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95){
+rFHTRBM <- function(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95){
   lower_bound <- 0
 
-  getM <- function(x0, nu, kappa, sigma, k, t_point, ft_point, slopes, intercepts, lambda_1, upper_bound){
+  getM <- function(x0, nu, kappa, sigma, k, t_point, ft_point, slopes, 
+                   intercepts, lambda_1, upper_bound){
     M <- rep(NA, k)
     for(i in 1:k){
       if (i < k) {
         obj_tri <- function(t){
-          return(- dFHT_c(t, x0, nu, kappa, sigma) / (slopes[i] * t + intercepts[i]))
+          return(- dFHT_c(t, x0, nu, kappa, sigma) / 
+                   (slopes[i] * t + intercepts[i]))
         }
         M[i] <- -optimize(obj_tri, c(t_point[i], t_point[i+1]))$objective
       } else {
         obj_exp <- function(t){
-          return(- dFHT_c(t, x0, nu, kappa, sigma) / (dexp(t, rate = lambda_1) ))
+          return(- dFHT_c(t, x0, nu, kappa, sigma) / 
+                   (dexp(t, rate = lambda_1) ))
         }
         M[i] <- -optimize(obj_exp, c(t_point[k], upper_bound))$objective
       }
@@ -96,9 +103,9 @@ rFHT <- function(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95){
   lambda_1 <- sigma^2 * pi^2 / (8 * (kappa - nu)^2)
 
   # get qth quantile point t_q
-  t_q <- qFHT(qTail, x0, nu, kappa, sigma)
+  t_q <- qFHTRBM(qTail, x0, nu, kappa, sigma)
   ft_qq <- dFHT_c(t_q, x0, nu, kappa, sigma)
-  upper_bound <- qFHT(0.9999, x0, nu, kappa, sigma)
+  upper_bound <- qFHTRBM(0.9999, x0, nu, kappa, sigma)
 
   # get highest density point t_mode
   obj_FHT_mode <- function(t){
@@ -121,7 +128,8 @@ rFHT <- function(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95){
     (t_point[2:k] - t_point[1:(k-1)]) # length (k-1)
   intercepts <- ft_point[2:k] - slopes * t_point[2:k]  # length (k-1)
 
-  # calculate the integral for each piece, the integral would be used for sampling
+  # calculate the integral for each piece, 
+  # the integral will be used for sampling
   I <- slopes * ( t_point[2:k]^2 - t_point[1:(k-1)]^2 ) / 2 +
     intercepts * (t_point[2:k] - t_point[1:(k-1)])
   I <- c(I, 1 - pexp(t_q, rate = lambda_1))

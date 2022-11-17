@@ -29,8 +29,8 @@ NULL
 ## cdf of FHT distribution of reflected Brownian motion
 pFHT_nimble <- nimble::nimbleFunction(
   run = function(x = double(0),
-                 x0 = double(0), nu = double(0), kappa = double(0), sigma = double(0),
-                 log = integer(0, default = 0)){
+                 x0 = double(0), nu = double(0), kappa = double(0), 
+                 sigma = double(0), log = integer(0, default = 0)){
     returnType(double(0))
     if (x <= 0){
       if(log) return(log(0))
@@ -41,8 +41,8 @@ pFHT_nimble <- nimble::nimbleFunction(
     ## cdf
     while ( abs(temp) > 0) {
       lambda_n <- (2 * n - 1)^2 * sigma^2 * pi^2 / (8 * (kappa - nu)^2)
-      c_n <- (-1)^(n + 1) * 4 * cos((2 * n - 1) * pi * (kappa - x0) / (2 * (kappa - nu))) /
-        ((2 * n - 1) * pi)
+      c_n <- (-1)^(n + 1) * 4 * cos((2 * n - 1) * pi * (kappa - x0) / 
+                                      (2 * (kappa - nu))) /((2 * n - 1) * pi)
       temp <- c_n * exp(-lambda_n * x)
       smt <- smt + temp
       n <- n + 1
@@ -59,8 +59,8 @@ pFHT_nimble <- nimble::nimbleFunction(
 
 dFHT_lklh_nimble <- nimble::nimbleFunction(
   run = function(x = double(0), event = double(0),
-                 x0 = double(0), nu = double(0), kappa = double(0), sigma = double(0),
-                 log = integer(0, default = 0)){
+                 x0 = double(0), nu = double(0), kappa = double(0), 
+                 sigma = double(0), log = integer(0, default = 0)){
     returnType(double(0))
 
     unit <- 1
@@ -95,8 +95,8 @@ rFHT_lklh_nimble <- nimble::nimbleFunction(
   })
 
 
-runMCMC_reThReg <- function(modeltype, fit_data, fit_const, fit_init, coefName,
-                            thin = thin, nburnin = nburnin, niter = niter, nchains = nchains){
+runMCMC_reThReg <- function(modeltype, fit_data, fit_const, fit_init, 
+                            coefName, thin, nburnin, niter, nchains){
   if (modeltype == "1"){
     if (is.null(fit_init)){
       fit_init <- list(alpha = rep(0, fit_const$n_para),
@@ -109,7 +109,9 @@ runMCMC_reThReg <- function(modeltype, fit_data, fit_const, fit_init, coefName,
 
     fit_code <- nimbleCode({
       for(i in 1:fit_const$n_evts) {
-        x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = fit_const$x0, nu = nu, kappa = kappaa[id[i]], sigma = sigmaa[id[i]])
+        x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = fit_const$x0, 
+                                nu = nu, kappa = kappaa[id[i]], 
+                                sigma = sigmaa[id[i]])
       }
       for (i in 1:fit_const$n_subj){
         z1[i] ~ dnorm(0, sd = sqrt(theta[1]))
@@ -142,7 +144,9 @@ runMCMC_reThReg <- function(modeltype, fit_data, fit_const, fit_init, coefName,
 
     fit_code <- nimbleCode({
       for(i in 1:fit_const$n_evts) {
-        x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = fit_const$x0, nu = nu, kappa = kappaa[id[i]], sigma = sigmaa[id[i]])
+        x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = fit_const$x0, 
+                                nu = nu, kappa = kappaa[id[i]], 
+                                sigma = sigmaa[id[i]])
       }
       for (i in 1:fit_const$n_subj){
         z1[i] ~ dnorm(0, sd = sqrt(theta[1]))
@@ -173,7 +177,9 @@ runMCMC_reThReg <- function(modeltype, fit_data, fit_const, fit_init, coefName,
 
     fit_code <- nimbleCode({
       for(i in 1:fit_const$n_evts) {
-        x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = fit_const$x0, nu = nu, kappa = kappaa[id[i]], sigma = sigmaa[id[i]])
+        x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = fit_const$x0, 
+                                nu = nu, kappa = kappaa[id[i]], 
+                                sigma = sigmaa[id[i]])
       }
       for (i in 1:fit_const$n_subj){
         z1[i] ~ dnorm(0, sd = sqrt(theta))
@@ -204,8 +210,10 @@ runMCMC_reThReg <- function(modeltype, fit_data, fit_const, fit_init, coefName,
                      nburnin = nburnin,
                      nchains = nchains,
                      setSeed = TRUE)
-  colnames(mcmc)[grepl("alpha|beta", colnames(mcmc))] <- c(paste0(coefName, "_Kappa"), paste0(coefName, "_Sigma"))
-  colnames(mcmc)[grepl("theta", colnames(mcmc))] <- c("fVarSigma", "fVarKappa")[1:length(fit_init$theta)]
+  colnames(mcmc)[grepl("alpha|beta", colnames(mcmc))] <- 
+    c(paste0(coefName, "_Kappa"), paste0(coefName, "_Sigma"))
+  colnames(mcmc)[grepl("theta", colnames(mcmc))] <- 
+    c("fVarSigma", "fVarKappa")[1:length(fit_init$theta)]
   # print(names(mcmc))
   return(mcmc)
 }

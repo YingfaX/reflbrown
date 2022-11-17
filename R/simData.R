@@ -23,32 +23,31 @@ NULL
 #' @description The function simData generates simulated recurrent events from
 #' reflected Brownian motion.
 #'
-#' @param size         Patient sample size. This argument should be a numeric value
-#' @param endTime      The end of the follow up times of patients.
+#' @param size       Patient sample size. This argument should be a numeric value
+#' @param endTime    The end of the follow up times of patients.
 #'     This argument should be a numeric vector.
-#' @param X            The covariates matrix for patients.
+#' @param X          The covariates matrix for patients.
 #'     This argument should be a matrix which records the covariate vector of
 #'     subject $i$ in row i.
-#' @param kappaCoef    The coefficents of upper reflection barrier.
+#' @param kappaCoef  The coefficents of upper reflection barrier.
 #'     This argument should be a numeric vector.
-#' @param sigmaCoef    The coefficents of volatility.
+#' @param sigmaCoef  The coefficents of volatility.
 #'     This argument should be a numeric vector.
-#' @param theta        The variance of frailties.
+#' @param theta      The variance of frailties.
 #'     This argument should be a numeric vector with length $2$.
-#' @param gamma        The coefficient of frailty.
+#' @param gamma      The coefficient of frailty.
 #'     This argument should be a numeric value.
-#' @param x0           The starting point of the reflected Brownian motion.
+#' @param x0         The starting point of the reflected Brownian motion.
 #'     This argument should be a numeric value.
-#' @param nu           The lower boundary of the reflected Brownian motion.
+#' @param nu         The lower boundary of the reflected Brownian motion.
 #'     This argument should be a numeric value.
-#' @param roundTime    A logical value with default value TRUE indicating whether
+#' @param roundTime  A logical value with default value TRUE indicating whether
 #'     to round the generated gap times or not round.
-#' @param gapTime      A logical value with default value FALSE indicating whether
+#' @param gapTime    A logical value with default value FALSE indicating whether
 #'     to return the generated gap times or calender time.
-#' @param event_num    The number of simulated random gap times for one patients.
+#' @param event_num  The number of simulated random gap times for one patients.
 #'     Only the cumulative random gap times smaller the follow up time are
-#'     saved as output.
-#'     This argument should be a numeric value.
+#'     saved as output. This argument should be a numeric value.
 #' @export
 simData <- function(size,
                     endTime,
@@ -70,7 +69,7 @@ simData <- function(size,
   # generate hypo-event time and set status
   dat_evt <- data.frame('id' = NA, 'event' = NA,'time' = NA)
   for (i in 1:size){
-    simGapTimes <- rFHT(n = event_num, x0 = x0, nu = nu, kappa = kappas[i],
+    simGapTimes <- rFHTRBM(n = event_num, x0 = x0, nu = nu, kappa = kappas[i],
                         sigma = sigmas[i])
     if (roundTime) {
       simGapTimes <- round(simGapTimes)

@@ -18,25 +18,30 @@ reThReg(
 )
 }
 \arguments{
-\item{formula}{A formula object, with the response on the left of a "~" operator, and
-the predictors on the right. The response must be a recurrent event object
-as returned by function Recur.}
+\item{formula}{A formula object, with the response on the left
+of a "~" operator, and the predictors on the right. The response must be
+a recurrent event object as returned by function Recur.}
 
-\item{data}{A data frame includes all the variables in "formula". Data frame should not include intercept}
+\item{data}{A data frame includes all the variables in "formula".
+Data frame should not include intercept}
 
 \item{model}{Model type indicator. Three types: "1", "2", and "3"}
 
-\item{x0}{The starting point of Brownian motion, which is a known parameter in model.}
+\item{x0}{The starting point of Brownian motion, which is a known
+parameter in model.}
 
-\item{nu}{The lower boundary of Brownian motion, which is a known parameter in model.}
+\item{nu}{The lower boundary of Brownian motion, which is a known
+parameter in model.}
 
-\item{initial}{The initial value for MCMC, which is optional. Defulat is Null.}
+\item{initial}{The initial value for MCMC, which is optional.
+Default is Null.}
 
 \item{thin}{Thinning number of MCMC chain.}
 
 \item{nburnin}{Burn-in number of MCMC chain.}
 
-\item{niter}{Total number of iteration of MCMC chain before thin and burn-in.}
+\item{niter}{Total number of iteration of MCMC chain before thin
+and burn-in.}
 
 \item{nchains}{Number of chains}
 }
