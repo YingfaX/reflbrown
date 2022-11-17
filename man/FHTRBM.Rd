@@ -10,7 +10,7 @@
 \usage{
 dFHTRBM(x, x0, nu, kappa, sigma, log = FALSE)
 
-pFHTRBM(x, x0, nu, kappa, sigma)
+pFHTRBM(q, x0, nu, kappa, sigma)
 
 qFHTRBM(p, x0, nu, kappa, sigma)
 
@@ -28,6 +28,8 @@ rFHTRBM(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95)
 \item{sigma}{volatility; scalar}
 
 \item{log}{default is FALSE}
+
+\item{q}{random values; vector}
 
 \item{p}{vector of probabilities}
 

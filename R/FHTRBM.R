@@ -44,13 +44,13 @@ dFHTRBM <- function(x, x0, nu, kappa, sigma, log = FALSE){
 
 #' @rdname FHTRBM
 #'
-#' @param x        random values; vector
+#' @param q        random values; vector
 #' @export
 #' @examples
 #' pFHTRBM(1, 10, 3.9, 20, 3)
 #' pFHTRBM(c(1:5), 10, 3.9, 20, 3)
-pFHTRBM <- function(x, x0, nu, kappa, sigma){
-  return(pFHT_c(t = x, x0, nu, kappa, sigma))
+pFHTRBM <- function(q, x0, nu, kappa, sigma){
+  return(pFHT_c(t = q, x0, nu, kappa, sigma))
 }
 
 
