@@ -2,12 +2,22 @@ Package: reThReg
 Type: Package
 Title: Recurrent Event Modeling
 Version: 1.0
-Date: 2022-10-04
-Author: Yingfa Xie
-Maintainer: Yingfa Xie <yingfa.xie@uconn.edu>
+Date: 2022-11-17
+Authors@R: c(
+    person(given = "Yingfa", family = "Xie",
+           email = "yingfa.xie@uconn.edu",
+           role = c("aut", "cre")),
+    person(given = "Jun", family = "Yan", 
+           email = "jun.yan@uconn.edu",
+           role = "aut")
+    )
 Description: Modeling recurrent events based on reflected Brownian motion.
 License: GPL (>= 2)
 Encoding: UTF-8
-Imports: Rcpp (>= 1.0.9), copula, nimble
+Imports: Rcpp (>= 1.0.9), copula, nimble, reda
 LinkingTo: Rcpp
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
 RoxygenNote: 7.2.1  

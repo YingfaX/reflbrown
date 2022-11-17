@@ -1,44 +1,64 @@
+##
+## R package reThReg by Yingfa Xie and Jun Yan
+## Copyright (C) 2022
+##
+## This file is part of the R package reThReg.
+##
+## The R package reThReg is free software: You can redistribute it and/or
+## modify it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or any later
+## version (at your option). See the GNU General Public License at
+## <https://www.gnu.org/licenses/> for details.
+##
+## The R package reThReg is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+##
 
+#' @importFrom stats dexp optimize pexp rnorm
+NULL
 
-#' @title Simulated Recurrent Events 
-#' 
-#' @description The function simData generates simulated recurrent events from 
+#' @title Simulated Recurrent Events
+#'
+#' @description The function simData generates simulated recurrent events from
 #' reflected Brownian motion.
-#' 
+#'
 #' @param size         Patient sample size. This argument should be a numeric value
-#' @param endTime      The end of the follow up times of patients. 
-#'    This argument should be a numeric vector.
-#' @param X            The covariates matrix for patients. 
-#'    This argument should be a matrix which records the covariate vector of subject $i$ in row i.  
-#' @param kappaCoef    The coefficents of upper reflection barrier. 
-#'    This argument should be a numeric vector.
-#' @param sigmaCoef    The coefficents of volatility. 
-#'    This argument should be a numeric vector.
-#' @param theta        The variance of frailties. 
-#'    This argument should be a numeric vector with length $2$.
-#' @param gamma        The coefficient of frailty. 
-#'    This argument should be a numeric value. 
-#' @param x0           The starting point of the reflected Brownian motion. 
-#'    This argument should be a numeric value.
-#' @param nu           The lower boundary of the reflected Brownian motion. 
-#'    This argument should be a numeric value.
-#' @param roundTime    A logical value with default value TRUE indicating whether 
-#'    to round the generated gap times or not round.
-#' @param gapTime      A logical value with default value FALSE indicating whether 
-#'    to return the generated gap times or calender time.
-#' @param event_num    The number of simulated random gap times for one patients. 
-#'    Only the cumulative random gap times smaller the follow up time are saved as output. 
-#'    This argument should be a numeric value.
+#' @param endTime      The end of the follow up times of patients.
+#'     This argument should be a numeric vector.
+#' @param X            The covariates matrix for patients.
+#'     This argument should be a matrix which records the covariate vector of
+#'     subject $i$ in row i.
+#' @param kappaCoef    The coefficents of upper reflection barrier.
+#'     This argument should be a numeric vector.
+#' @param sigmaCoef    The coefficents of volatility.
+#'     This argument should be a numeric vector.
+#' @param theta        The variance of frailties.
+#'     This argument should be a numeric vector with length $2$.
+#' @param gamma        The coefficient of frailty.
+#'     This argument should be a numeric value.
+#' @param x0           The starting point of the reflected Brownian motion.
+#'     This argument should be a numeric value.
+#' @param nu           The lower boundary of the reflected Brownian motion.
+#'     This argument should be a numeric value.
+#' @param roundTime    A logical value with default value TRUE indicating whether
+#'     to round the generated gap times or not round.
+#' @param gapTime      A logical value with default value FALSE indicating whether
+#'     to return the generated gap times or calender time.
+#' @param event_num    The number of simulated random gap times for one patients.
+#'     Only the cumulative random gap times smaller the follow up time are
+#'     saved as output.
+#'     This argument should be a numeric value.
 #' @export
-simData <- function(size, 
+simData <- function(size,
                     endTime,
-                    X, 
-                    kappaCoef, 
-                    sigmaCoef, 
-                    theta,  
+                    X,
+                    kappaCoef,
+                    sigmaCoef,
+                    theta,
                     gamma,
                     x0,
-                    nu, 
+                    nu,
                     roundTime = TRUE,
                     gapTime = FALSE,
                     event_num = 500){
@@ -46,11 +66,12 @@ simData <- function(size,
   sigmas <- exp(X %*% sigmaCoef + z1)
   z2 <- rnorm(size, mean = 0, sd = sqrt(theta[2]))
   kappas <- x0 + exp(X %*% kappaCoef + gamma * z1 + z2)
-  
+
   # generate hypo-event time and set status
   dat_evt <- data.frame('id' = NA, 'event' = NA,'time' = NA)
   for (i in 1:size){
-    simGapTimes <- rFHT(n = event_num, x0 = x0, nu = nu, kappa = kappas[i], sigma = sigmas[i])
+    simGapTimes <- rFHT(n = event_num, x0 = x0, nu = nu, kappa = kappas[i],
+                        sigma = sigmas[i])
     if (roundTime) {
       simGapTimes <- round(simGapTimes)
     }
@@ -62,17 +83,17 @@ simData <- function(size,
       time <- simGapTimes[1:time_end_indx]
       time[length(time)] <- endTime[i] - sum(time[1:(time_end_indx - 1)] )
     }
-    
+
     # set event status
     event <- c(rep(1, length(time) - 1), 0)
     dat_evt_new <- data.frame('id' = rep(i, length(time)),
                               'event' = event,
                               'time' = time)
-    
+
     # combine event times for all patients
     dat_evt <- rbind(dat_evt, dat_evt_new)
   }
-  
+
   # remove first row
   dat_evt <- dat_evt[!is.na(dat_evt$time), ]
   # merge hypo-event time and covariates

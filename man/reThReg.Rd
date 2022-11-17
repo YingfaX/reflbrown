@@ -18,8 +18,8 @@ reThReg(
 )
 }
 \arguments{
-\item{formula}{A formula object, with the response on the left of a "~" operator, and 
-the predictors on the right. The response must be a recurrent event object 
+\item{formula}{A formula object, with the response on the left of a "~" operator, and
+the predictors on the right. The response must be a recurrent event object
 as returned by function Recur.}
 
 \item{data}{A data frame includes all the variables in "formula". Data frame should not include intercept}
@@ -38,7 +38,7 @@ as returned by function Recur.}
 
 \item{niter}{Total number of iteration of MCMC chain before thin and burn-in.}
 
-\item{nchain}{Number of chain}
+\item{nchains}{Number of chains}
 }
 \description{
 The function reThReg return mcmc samples.

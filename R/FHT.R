@@ -1,18 +1,36 @@
+##
+## R package reThReg by Yingfa Xie and Jun Yan
+## Copyright (C) 2022
+##
+## This file is part of the R package reThReg.
+##
+## The R package reThReg is free software: You can redistribute it and/or
+## modify it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or any later
+## version (at your option). See the GNU General Public License at
+## <https://www.gnu.org/licenses/> for details.
+##
+## The R package reThReg is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+##
+
 #' @useDynLib reThReg, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom copula safeUroot
 NULL
 
 #' @title The First Hitting Time Distribution
-#' 
+#'
 #' @name FHT
-#' @description Density, distribution, quantile, and random number generation function
+#' @description    Density, distribution, quantile, and random number
+#'     generation function
 #' @param t        random values; vector
 #' @param x0       starting point; scalar
 #' @param nu       lower barrier; scalar
 #' @param kappa    upper reflection barrier; scalar
 #' @param sigma    volatility; scalar
-#' @examples 
+#' @examples
 #' dFHT(1, 10, 3.9, 20, 3)
 #' dFHT(c(1:5), 10, 3.9, 20, 3)
 #' @export
@@ -21,10 +39,10 @@ dFHT <- function(t, x0, nu, kappa, sigma){
 }
 
 #' @rdname FHT
-#' 
+#'
 #' @param t        random values; vector
 #' @export
-#' @examples 
+#' @examples
 #' pFHT(1, 10, 3.9, 20, 3)
 #' pFHT(c(1:5), 10, 3.9, 20, 3)
 pFHT <- function(t, x0, nu, kappa, sigma){
@@ -34,28 +52,28 @@ pFHT <- function(t, x0, nu, kappa, sigma){
 
 qFHT_scale <- function(p, x0, nu, kappa, sigma){
   obj_quantile <- function(t){
-    return(pFHT(t, x0, nu, kappa, sigma) - p) 
+    return(pFHT(t, x0, nu, kappa, sigma) - p)
   }
   t_q <- safeUroot(obj_quantile, c(0, .Machine$integer.max))$root
   return(t_q)
 }
 
 #' @rdname FHT
-#' 
+#'
 #' @param p        vector of probabilities
 #' @export
 qFHT <- Vectorize(FUN = qFHT_scale)
 
 
 #' @rdname FHT
-#' 
+#'
 #' @param n           number of observations
 #' @param k           number of pieces to be included in proposal, default k = 3
 #' @param qTail       the user-defined qth quantile for the tail, default q = 0.95
 #' @export
 rFHT <- function(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95){
   lower_bound <- 0
-  
+
   getM <- function(x0, nu, kappa, sigma, k, t_point, ft_point, slopes, intercepts, lambda_1, upper_bound){
     M <- rep(NA, k)
     for(i in 1:k){
@@ -73,44 +91,49 @@ rFHT <- function(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95){
     }
     return(M)
   }
-  
+
   # get lambda_1 for tail proposal
   lambda_1 <- sigma^2 * pi^2 / (8 * (kappa - nu)^2)
-  
+
   # get qth quantile point t_q
   t_q <- qFHT(qTail, x0, nu, kappa, sigma)
   ft_qq <- dFHT_c(t_q, x0, nu, kappa, sigma)
   upper_bound <- qFHT(0.9999, x0, nu, kappa, sigma)
-  
+
   # get highest density point t_mode
   obj_FHT_mode <- function(t){
     return(-dFHT_c(t, x0, nu, kappa, sigma))
   }
   t_mode <- optimize(obj_FHT_mode, c(lower_bound, t_q))$minimum
-  
+
   # start point for each piece of proposal
-  t_point <- c(lower_bound, seq(t_mode, t_q, length.out = (k-1))) # length k, with 0 
-  # the density function of each t point, which will be used to determine the proposal 
-  ft_point <- dFHT_c(t_point, x0, nu, kappa, sigma) 
-  # the probability function of each t point, which will be used to decide sampling from which part
+  # length k, with 0
+  t_point <- c(lower_bound, seq(t_mode, t_q, length.out = (k-1)))
+  # the density function of each t point, which will be used to
+  # determine the proposal
+  ft_point <- dFHT_c(t_point, x0, nu, kappa, sigma)
+  # the probability function of each t point, which will be used to
+  # decide sampling from which part
   pt_point <- c(pFHT_c(t_point, x0, nu, kappa, sigma)[-1], 1)
-  
+
   # determine the line (slope and intercept) of each piece of proposal
-  slopes <- (ft_point[2:k] - ft_point[1:(k-1)]) / 
+  slopes <- (ft_point[2:k] - ft_point[1:(k-1)]) /
     (t_point[2:k] - t_point[1:(k-1)]) # length (k-1)
   intercepts <- ft_point[2:k] - slopes * t_point[2:k]  # length (k-1)
-  
+
   # calculate the integral for each piece, the integral would be used for sampling
-  I <- slopes * ( t_point[2:k]^2 - t_point[1:(k-1)]^2 ) / 2 + 
-    intercepts * (t_point[2:k] - t_point[1:(k-1)])  
+  I <- slopes * ( t_point[2:k]^2 - t_point[1:(k-1)]^2 ) / 2 +
+    intercepts * (t_point[2:k] - t_point[1:(k-1)])
   I <- c(I, 1 - pexp(t_q, rate = lambda_1))
-  
+
   # determine M of each piece
-  M <- getM(x0, nu, kappa, sigma, k, t_point, ft_point, slopes, intercepts, lambda_1, upper_bound) # length k
-  
+  # length k
+  M <- getM(x0, nu, kappa, sigma, k, t_point, ft_point, slopes, intercepts,
+            lambda_1, upper_bound)
+
   # sampling part implemented in C
   ret <- rFHT_c(n, x0, nu, kappa, sigma, k, lambda_1,
-                t_point, slopes, intercepts, 
+                t_point, slopes, intercepts,
                 M, I, pt_point)$samples
   return(ret)
 }

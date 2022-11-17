@@ -3,14 +3,38 @@
 *.blg
 *.log
 *.out
-*.gz
+*.tar.gz
+*.Rcheck/
+*.o
+*.so
+*.*~
+*~
 
 *.fdb_latexmk
 *.fls
-*.Rproj.user
+
+# RStudio files
+*.Rproj
+.Rproj.user
+
 */*.RData
 */.DS_Store
 *.DS_Store
 */*.nav
 */*.snm
 */*.toc
+
+# History files
+.Rhistory
+.Rapp.history
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# ignore tags
+TAGS
+GTAGS
+GRTAGS
+GPATH
+.clang_complete

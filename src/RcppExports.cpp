@@ -77,3 +77,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_reThReg_dFHT_c", (DL_FUNC) &_reThReg_dFHT_c, 5},
+    {"_reThReg_pFHT_c", (DL_FUNC) &_reThReg_pFHT_c, 5},
+    {"_reThReg_solveQuad", (DL_FUNC) &_reThReg_solveQuad, 4},
+    {"_reThReg_rFHT_c", (DL_FUNC) &_reThReg_rFHT_c, 13},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_reThReg(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

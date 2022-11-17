@@ -22,41 +22,41 @@ simData(
 \arguments{
 \item{size}{Patient sample size. This argument should be a numeric value}
 
-\item{endTime}{The end of the follow up times of patients. 
+\item{endTime}{The end of the follow up times of patients.
 This argument should be a numeric vector.}
 
-\item{X}{The covariates matrix for patients. 
+\item{X}{The covariates matrix for patients.
 This argument should be a matrix which records the covariate vector of subject $i$ in row i.}
 
-\item{kappaCoef}{The coefficents of upper reflection barrier. 
+\item{kappaCoef}{The coefficents of upper reflection barrier.
 This argument should be a numeric vector.}
 
-\item{sigmaCoef}{The coefficents of volatility. 
+\item{sigmaCoef}{The coefficents of volatility.
 This argument should be a numeric vector.}
 
-\item{theta}{The variance of frailties. 
+\item{theta}{The variance of frailties.
 This argument should be a numeric vector with length $2$.}
 
-\item{gamma}{The coefficient of frailty. 
+\item{gamma}{The coefficient of frailty.
 This argument should be a numeric value.}
 
-\item{x0}{The starting point of the reflected Brownian motion. 
+\item{x0}{The starting point of the reflected Brownian motion.
 This argument should be a numeric value.}
 
-\item{nu}{The lower boundary of the reflected Brownian motion. 
+\item{nu}{The lower boundary of the reflected Brownian motion.
 This argument should be a numeric value.}
 
-\item{roundTime}{A logical value with default value TRUE indicating whether 
+\item{roundTime}{A logical value with default value TRUE indicating whether
 to round the generated gap times or not round.}
 
-\item{gapTime}{A logical value with default value FALSE indicating whether 
+\item{gapTime}{A logical value with default value FALSE indicating whether
 to return the generated gap times or calender time.}
 
-\item{event_num}{The number of simulated random gap times for one patients. 
-Only the cumulative random gap times smaller the follow up time are saved as output. 
+\item{event_num}{The number of simulated random gap times for one patients.
+Only the cumulative random gap times smaller the follow up time are saved as output.
 This argument should be a numeric value.}
 }
 \description{
-The function simData generates simulated recurrent events from 
+The function simData generates simulated recurrent events from
 reflected Brownian motion.
 }
