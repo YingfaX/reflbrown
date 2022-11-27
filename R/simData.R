@@ -1,19 +1,20 @@
 ##
-## R package reThReg by Yingfa Xie and Jun Yan
+## R package rebrown by Yingfa Xie and Jun Yan
 ## Copyright (C) 2022
 ##
-## This file is part of the R package reThReg.
+## This file is part of the R package rebrown.
 ##
-## The R package reThReg is free software: You can redistribute it and/or
+## The R package rebrown is free software: You can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or any later
 ## version (at your option). See the GNU General Public License at
 ## <https://www.gnu.org/licenses/> for details.
 ##
-## The R package reThReg is distributed in the hope that it will be useful,
+## The R package rebrown is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
+
 
 #' @importFrom stats dexp optimize pexp rnorm
 NULL
@@ -48,12 +49,29 @@ NULL
 #' @param event_num  The number of simulated random gap times for one patients.
 #'     Only the cumulative random gap times smaller the follow up time are
 #'     saved as output. This argument should be a numeric value.
+#' @examples
+#' data(simuCovDat)
+#' size <- nrow(simuCovDat)
+#' set.seed(2)
+#' Intercept <- rep(1, size)
+#' simuDat <- simData(size = size,
+#'                    endTime = simuCovDat$censorTime,
+#'                    X = cbind(Intercept, as.matrix(simuCovDat[, c("x1", "x2")])),
+#'                    sigmaCoef = c(0.9, -0.2, -0.1),
+#'                    kappaCoef = c(2.9, 0.2, -0.1),
+#'                    theta = c(0.2, 0.3),
+#'                    gamma = 0,
+#'                    x0 = 10,
+#'                    nu = 3.9)
+#'
+#' head(simuDat)
+#'
 #' @export
 simData <- function(size,
                     endTime,
                     X,
-                    kappaCoef,
                     sigmaCoef,
+                    kappaCoef,
                     theta,
                     gamma,
                     x0,
@@ -97,7 +115,7 @@ simData <- function(size,
   dat_evt <- dat_evt[!is.na(dat_evt$time), ]
   # merge hypo-event time and covariates
   X <- data.frame(X)
-  colnames(X) <- paste0("X", c(1:ncol(X)))
+  # colnames(X) <- paste0("x", c(1:ncol(X)))
   X$id <- c(1:size)
   dat_sim <- merge(dat_evt, X, by = 'id')
   return(dat_sim)

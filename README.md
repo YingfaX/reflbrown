@@ -1,9 +1,9 @@
-# reThReg
+# rebrown
 
 ## Install
 
 ```R
-devtools::install_github("YingfaX/reThReg",
+devtools::install_github("YingfaX/rebrown",
                          ref="main",
-                         auth_token = "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")
+                         auth_token = "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")
 ```

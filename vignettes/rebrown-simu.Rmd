@@ -1,0 +1,26 @@
+---
+title: " Simulate Reccurent Event Data with rebrown Package"
+author: Yingfa Xie
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+bibliography: ../inst/bib/rebrown.bib
+vignette: >
+  %\VignetteIndexEntry{ Simulate Reccurent Event Data with rebrown Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In this vignettes, we briefly introduce how to simulate recurrent event data 
+from the proposed model with the **rebrown** package. The function `simData()` 
+provide an interface for simulating recurrent event times. The details for 
+using `simData()` are provided.
+
+
+# Introduction 
+
+## Sampling method 
+  To be updated.

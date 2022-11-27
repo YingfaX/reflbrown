@@ -15,3 +15,6 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
+#' @importFrom reda Recur
+#' @export
+reda::Recur

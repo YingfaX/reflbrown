@@ -41,12 +41,17 @@ rFHTRBM(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95)
 }
 \description{
 Density, distribution, quantile, and random number
-    generation function
+    generation function of first hitting time (hitting down) distribution
+    of reflected Brownian motion.
 }
 \examples{
 dFHTRBM(1, 10, 3.9, 20, 3)
 dFHTRBM(c(1:5), 10, 3.9, 20, 3)
-
 pFHTRBM(1, 10, 3.9, 20, 3)
 pFHTRBM(c(1:5), 10, 3.9, 20, 3)
+}
+\references{
+Hu, Q., Wang, Y., and Yang, X. (2012). The hitting time density
+for a reflected Brownian motion.
+\emph{Computational Economics}, \bold{40}, 1–18.
 }

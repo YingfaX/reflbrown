@@ -8,8 +8,8 @@ simData(
   size,
   endTime,
   X,
-  kappaCoef,
   sigmaCoef,
+  kappaCoef,
   theta,
   gamma,
   x0,
@@ -29,10 +29,10 @@ This argument should be a numeric vector.}
 This argument should be a matrix which records the covariate vector of
 subject $i$ in row i.}
 
-\item{kappaCoef}{The coefficents of upper reflection barrier.
+\item{sigmaCoef}{The coefficents of volatility.
 This argument should be a numeric vector.}
 
-\item{sigmaCoef}{The coefficents of volatility.
+\item{kappaCoef}{The coefficents of upper reflection barrier.
 This argument should be a numeric vector.}
 
 \item{theta}{The variance of frailties.
@@ -60,4 +60,22 @@ saved as output. This argument should be a numeric value.}
 \description{
 The function simData generates simulated recurrent events from
 reflected Brownian motion.
+}
+\examples{
+data(simuCovDat)
+size <- nrow(simuCovDat)
+set.seed(2)
+Intercept <- rep(1, size)
+simuDat <- simData(size = size,
+                   endTime = simuCovDat$censorTime,
+                   X = cbind(Intercept, as.matrix(simuCovDat[, c("x1", "x2")])),
+                   sigmaCoef = c(0.9, -0.2, -0.1),
+                   kappaCoef = c(2.9, 0.2, -0.1),
+                   theta = c(0.2, 0.3),
+                   gamma = 0,
+                   x0 = 10,
+                   nu = 3.9)
+
+head(simuDat)
+
 }
