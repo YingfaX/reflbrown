@@ -284,10 +284,12 @@ runMCMC_FHTRBM <- function(frailty,
 #' @examples
 #' data(simuEvtDat)
 #' # need to run longer MCMC chain
+#' \dontrun{
 #' mcmc <- fitFHTRBM(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
 #'                  data = simuEvtDat,
 #'                  frailty = "Independent",
-#'                  thin = 1, nburnin = 10, niter = 100, nchains = 1)
+#'                  thin = 10, nburnin = 3000, niter = 10000, nchains = 1)
+#' }
 #' @export
 fitFHTRBM <- function(formula, data, x0 = 10, nu = 3.9,
                       frailty = c("Correlated", "Independent", "StrgCorrelated"),

@@ -1,0 +1,155 @@
+---
+title: "Introduction to rebrown through Examples"
+author: Yingfa Xie
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+bibliography: ../inst/bib/rebrown.bib
+vignette: >
+  %\VignetteIndexEntry{Introduction to rebrown through Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In this vignettes, we briefly introduce how to explore recurrent event data by 
+first hitting time model of reflected Brownian motion (RBM) with the **rebrown** 
+package. The **rebrown** package implements the density, distribution, quantile, 
+and random number generation function of the first hitting time (FHT) distribution 
+(hitting down case) of RBM [@hu2012hitting]. The function `simData()` 
+in **rebrown** can be used for simulating recurrent event (gap) times. 
+Fitting recurrent data set with FHT model is implemented with `fitFHTRBM()`. 
+The sample paths of the reflected Brownian motion can be simulated with 
+`simPath()` function, which helps to illustrate when an event occur.
+
+
+# Introduction 
+
+## First hitting time density and distribution function 
+Consider a no-drift Brownian motion $X(t)$ with volatility $\sigma$, 
+upper reflection barrier $\kappa > 0$, lower barrier $\nu$, and starting point 
+$X(0) = x_0 \in [\nu, \kappa]$. The first time when $X(t)$ hits $\nu$ is 
+$\tau := \inf \{t > 0; X(t) = \nu \}$. 
+The density and distribution function of $\tau$ are, respectively [@hu2012hitting],
+\begin{align}
+  f(t|x_0, \nu, \kappa, \sigma) = \sum_{n=1}^{\infty} c_n \lambda_n e^{-\lambda_n t}, 
+   \quad F(t|x_0, \nu, \kappa, \sigma) = 1 - \sum_{n=1}^{\infty} c_n e^{-\lambda_n t}, 
+\end{align}
+where $t > 0$, and for $n = 1, 2, \ldots$,
+\begin{align*}
+  \lambda_n= \frac{(2n-1)^2 \sigma^2 \pi^2 }{8(\kappa - \nu)^2},
+  \mbox{ and }
+  c_n       = \frac{(-1)^{n + 1}4 }{(2n-1)\pi}
+                \cos \left( \frac{ (2n - 1)\pi(\kappa - x_0)}{2(\kappa - \nu)} \right).
+\end{align*}
+Note that $0 < \lambda_1 < \lambda_2 < \cdots$, $\lambda_n \to \infty$, and
+$\sum_{n=1}^{\infty} c_n = 1$.
+
+
+Random number generation with rejection sampling (the tail can be
+shown to be bounded by that of an exponential distribution).
+
+
+## First hitting time model for recurrent events
+The recurrent events can be modeled based on a sequence of reflected Brownian 
+motions hitting a lower barrier $\nu$. The reflected Brownian motion restarts 
+at a known starting point $x_0$ after hitting the lower barrier $\nu$. 
+The gap times between two successive events follow the FHT distribution. 
+The starting point $x_0$ and lower barrier $\nu$ are set to be fixed and assumed 
+known.
+
+
+To incorporate covariate and heterogeneity, the model 
+for $\sigma_i$ and $\kappa_i$ of subject $i$ with log links are
+\begin{equation}
+  \log(\sigma_i) = X_i^{\top} \boldsymbol{\beta} + Z_{i1}, \\
+  \log(\kappa_i - x_0) = X_i^{\top} \boldsymbol{\alpha} + \gamma Z_{i1} + Z_{i2}',
+\end{equation}
+where $X_i$ is a $p$-dimensional covariate vector,
+$\boldsymbol{\beta}$ and $\boldsymbol{\alpha}$ are $p$-dimensional 
+regression coefficient vectors, and $Z_{i1}$ and $Z_{i2}'$ are 
+normal random effects with mean zero,
+variance $\theta_1$ and $\theta_2'$, respectively.
+
+
+## Getting started
+```{r, message=FALSE}
+library(rebrown)
+set.seed(1)
+```
+
+
+## Simulate sample path 
+The sample paths help to illustrate when the event occur. `simPath()` requires 
+user to pass a vector of time index and the four parameters of the reflected 
+Brownian motion. The sample paths below illustrate $2$ events occurred and 
+the $3$th is censored during $200$ units of follow-up time. 
+```{r}
+time_idx <- seq(0, 200, 1)
+sim_list <- simPath(x0 = 10, nu = 3.9, kappa = 20, sigma = 1.5,
+                    time_idx, plot_path = TRUE)
+```
+
+
+## Simulate event (gap) times 
+The `simData()` is used for simulating event (gap) time for subject given the
+covariate. For simulating from the full model, one can assign value for the 
+regression coefficients in $\sigma$ and $\kappa$, 
+the coefficient of the frailty $\gamma$, 
+and the frailty variance $\boldsymbol{\theta}$. One can simulate the event time
+from independent frailty model by assigning $\gamma = 0$. Furthermore, if the 
+same frailty term is attempted to set in both $\sigma$ and $\kappa$, one can 
+assign the second element of $\boldsymbol{\theta}$ to be $0$. The simulated data 
+set records the calender time of the events for each subject.
+
+
+```{r}
+size <- 200
+x1 <- rnorm(size)                
+x2 <- rpois(size, 2) + 0.5 * x1 + runif(size)
+X <- data.frame("x1" = x1,
+                "x2" = x2)
+X <- scale(X)
+# simulate event time data set from independent frailty model
+simuData <- simData(size = size, 
+                    endTime = round(runif(size, 160, 180)),
+                    X = cbind("Intercept" = rep(1, size), X),
+                    sigmaCoef = c(1, 0.2, -0.2),
+                    kappaCoef = c(3, 0.1, 0.3),
+                    gamma = 0, 
+                    theta = c(0.2, 0.3),
+                    x0 = 10, nu = 3.9)
+```
+
+
+The simulated data contains `time`, `id`, `status`, and covariate. 
+```{r}
+head(simuData, 10)
+```
+
+
+## Fit the first hitting time model 
+To fit the data with FHT model, one can define the response by creating a `Recur`
+object implemented by **R** pacakge **reda** [@reda-package]. 
+The formula for the FHT model is given as 
+`Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2`. 
+The left hand side of the vertical bar is given as the covariates incorporated 
+into volatility $\sigma$ while the right hand side is given as the covariates 
+incorporated into upper reflection barrier $\kappa$. The frailty argument 
+can be set to be one of the three types, `Correlated`, `Independent`, or 
+`StrgCorrelated`. The function `fitFHTRBM` implements the MCMC with
+R package nimble and returns MCMC chain(s) for the model parameters. 
+The number of thinning, the burn-in period, and the number of iteration of 
+the MCMC chain can be set up by the user. 
+```{r, eval = FALSE}
+mcmc <- fitFHTRBM(Recur(time = time, id = id, event = event) ~ x1 + x2 | x1 + x2,
+                  data = simuData[, -4], # remove intercept column
+                  frailty = "Correlated",
+                  thin = 10, nburnin = 2000, niter = 10000, nchains = 1)
+```
+
+
+# Reference
+
