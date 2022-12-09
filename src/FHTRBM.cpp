@@ -2,7 +2,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector dFHTRBM_c(NumericVector t,
+NumericVector dfhtrbm_c(NumericVector t,
                         double x0, double nu, double kappa, double sigma){
   int n = t.size();
   NumericVector ret(n);
@@ -39,7 +39,7 @@ NumericVector dFHTRBM_c(NumericVector t,
 
 
 // [[Rcpp::export]]
-NumericVector pFHTRBM_c(NumericVector t,
+NumericVector pfhtrbm_c(NumericVector t,
                         double x0, double nu, double kappa, double sigma){
   int n = t.size();
   NumericVector ret(n);
@@ -89,7 +89,7 @@ NumericVector solveQuad(double slope, double intercept,
 }
 
 // [[Rcpp::export]]
-List rFHTRBM_c(int n, double x0, double nu, double kappa, double sigma,
+List rfhtrbm_c(int n, double x0, double nu, double kappa, double sigma,
                double k, double lambda_1,
                NumericVector t_point,
                NumericVector slopes,
@@ -114,7 +114,7 @@ List rFHTRBM_c(int n, double x0, double nu, double kappa, double sigma,
         u = Rcpp::runif(1, 0, I[part]);
         cand = solveQuad(slopes[part], intercepts[part], t_point[part], u[0]);
         count ++;
-        ratio = dFHTRBM_c(cand, x0, nu, kappa, sigma) /
+        ratio = dfhtrbm_c(cand, x0, nu, kappa, sigma) /
           (M[part] * (slopes[part] * cand + intercepts[part]) );
         if (U[0] <= ratio[0]){
           canddone[i] = cand[0];
@@ -127,7 +127,7 @@ List rFHTRBM_c(int n, double x0, double nu, double kappa, double sigma,
         u = Rcpp::runif(1, 1-I[part], 1);
         cand =  Rcpp::qexp(u, lambda_1);
         count ++;
-        ratio = dFHTRBM_c(cand, x0, nu, kappa, sigma) /
+        ratio = dfhtrbm_c(cand, x0, nu, kappa, sigma) /
           (M[part] * Rcpp::dexp(cand, lambda_1, false) );
         if (U[0] <= ratio[0]){
           canddone[i] = cand[0];

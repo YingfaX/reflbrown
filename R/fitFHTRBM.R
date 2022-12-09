@@ -1,16 +1,16 @@
 ##
-## R package rebrown by Yingfa Xie and Jun Yan
+## R package refbrown by Author and Author
 ## Copyright (C) 2022
 ##
-## This file is part of the R package rebrown.
+## This file is part of the R package refbrown.
 ##
-## The R package rebrown is free software: You can redistribute it and/or
+## The R package refbrown is free software: You can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or any later
 ## version (at your option). See the GNU General Public License at
 ## <https://www.gnu.org/licenses/> for details.
 ##
-## The R package rebrown is distributed in the hope that it will be useful,
+## The R package refbrown is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
@@ -25,7 +25,7 @@ NULL
 
 
 ## cdf of FHT distribution of reflected Brownian motion
-pFHT_nimble <- nimbleFunction(
+pFHT_nimble <- nimble::nimbleFunction(
   run = function(x = double(0),
                  x0 = double(0), nu = double(0), kappa = double(0),
                  sigma = double(0), log = integer(0, default = 0)){
@@ -55,7 +55,7 @@ pFHT_nimble <- nimbleFunction(
   })
 
 
-dFHT_lklh_nimble <- nimbleFunction(
+dFHT_lklh_nimble <- nimble::nimbleFunction(
   run = function(x = double(0), event = double(0),
                  x0 = double(0), nu = double(0), kappa = double(0),
                  sigma = double(0), log = integer(0, default = 0)){
@@ -81,7 +81,7 @@ dFHT_lklh_nimble <- nimbleFunction(
   })
 
 
-rFHT_lklh_nimble <- nimbleFunction(
+rFHT_lklh_nimble <- nimble::nimbleFunction(
   run = function(n = double(0), event = double(0),
                  x0 = double(0), nu = double(0),
                  kappa = double(0), sigma = double(0)){
@@ -147,7 +147,7 @@ runMCMC_FHTRBM <- function(frailty,
                        z2 = rnorm(fit_const$n_subj, 0, 0.1))
     }
 
-    fit_code <- nimbleCode({
+    fit_code <- nimble::nimbleCode({
       for(i in 1:n_evts) {
         x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = x0,
                                 nu = nu, kappa = kappaa[id[i]],
@@ -182,7 +182,7 @@ runMCMC_FHTRBM <- function(frailty,
                        z2 = rnorm(fit_const$n_subj, 0, 0.1))
     }
 
-    fit_code <- nimbleCode({
+    fit_code <- nimble::nimbleCode({
       for(i in 1:n_evts) {
         x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = x0,
                                 nu = nu, kappa = kappaa[id[i]],
@@ -215,7 +215,7 @@ runMCMC_FHTRBM <- function(frailty,
                        z1 = rnorm(fit_const$n_subj, 0, 0.1))
     }
 
-    fit_code <- nimbleCode({
+    fit_code <- nimble::nimbleCode({
       for(i in 1:n_evts) {
         x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = x0,
                                 nu = nu, kappa = kappaa[id[i]],
@@ -240,7 +240,7 @@ runMCMC_FHTRBM <- function(frailty,
     })
   }
   # print(names(fit_init))
-  mcmc <- nimbleMCMC(data = fit_data,
+  mcmc <- nimble::nimbleMCMC(data = fit_data,
                      constants = fit_const,
                      inits = fit_init,
                      code = fit_code,

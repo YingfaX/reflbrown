@@ -14,6 +14,8 @@ simData(
   gamma,
   x0,
   nu,
+  sigmaZ = NULL,
+  kappaZ = NULL,
   roundTime = TRUE,
   gapTime = FALSE,
   event_num = 500
@@ -46,6 +48,12 @@ This argument should be a numeric value.}
 
 \item{nu}{The lower boundary of the reflected Brownian motion.
 This argument should be a numeric value.}
+
+\item{sigmaZ}{The frailty in sigma, default is NULL.
+This argument should be a numeric vector.}
+
+\item{kappaZ}{The frailty in kappa, default is NULL.
+This argument should be a numeric vector.}
 
 \item{roundTime}{A logical value with default value TRUE indicating whether
 to round the generated gap times or not round.}

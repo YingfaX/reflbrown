@@ -1,16 +1,16 @@
 ##
-## R package rebrown by Yingfa Xie and Jun Yan
+## R package refbrown by Author and Author
 ## Copyright (C) 2022
 ##
-## This file is part of the R package rebrown.
+## This file is part of the R package refbrown.
 ##
-## The R package rebrown is free software: You can redistribute it and/or
+## The R package refbrown is free software: You can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or any later
 ## version (at your option). See the GNU General Public License at
 ## <https://www.gnu.org/licenses/> for details.
 ##
-## The R package rebrown is distributed in the hope that it will be useful,
+## The R package refbrown is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
@@ -42,6 +42,10 @@ NULL
 #'     This argument should be a numeric value.
 #' @param nu         The lower boundary of the reflected Brownian motion.
 #'     This argument should be a numeric value.
+#' @param sigmaZ     The frailty in sigma, default is NULL.
+#'     This argument should be a numeric vector.
+#' @param kappaZ     The frailty in kappa, default is NULL.
+#'     This argument should be a numeric vector.
 #' @param roundTime  A logical value with default value TRUE indicating whether
 #'     to round the generated gap times or not round.
 #' @param gapTime    A logical value with default value FALSE indicating whether
@@ -76,18 +80,25 @@ simData <- function(size,
                     gamma,
                     x0,
                     nu,
+                    sigmaZ = NULL,
+                    kappaZ = NULL,
                     roundTime = TRUE,
                     gapTime = FALSE,
                     event_num = 500){
-  z1 <- rnorm(size, mean = 0, sd = sqrt(theta[1]))
-  sigmas <- exp(X %*% sigmaCoef + z1)
-  z2 <- rnorm(size, mean = 0, sd = sqrt(theta[2]))
-  kappas <- x0 + exp(X %*% kappaCoef + gamma * z1 + z2)
+  if (is.null(sigmaZ)){
+    sigmaZ <- rnorm(size, mean = 0, sd = sqrt(theta[1]))
+  }
+  sigmas <- exp(X %*% sigmaCoef + sigmaZ)
+
+  if (is.null(kappaZ)){
+    kappaZ <- rnorm(size, mean = 0, sd = sqrt(theta[2]))
+  }
+  kappas <- x0 + exp(X %*% kappaCoef + gamma * sigmaZ + kappaZ)
 
   # generate hypo-event time and set status
   dat_evt <- data.frame('id' = NA, 'event' = NA,'time' = NA)
   for (i in 1:size){
-    simGapTimes <- rFHTRBM(n = event_num, x0 = x0, nu = nu, kappa = kappas[i],
+    simGapTimes <- rfhtrbm(n = event_num, x0 = x0, nu = nu, kappa = kappas[i],
                         sigma = sigmas[i])
     if (roundTime) {
       simGapTimes <- round(simGapTimes)

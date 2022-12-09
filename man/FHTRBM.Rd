@@ -2,42 +2,41 @@
 % Please edit documentation in R/FHTRBM.R
 \name{FHTRBM}
 \alias{FHTRBM}
-\alias{dFHTRBM}
-\alias{pFHTRBM}
-\alias{qFHTRBM}
-\alias{rFHTRBM}
+\alias{dfhtrbm}
+\alias{pfhtrbm}
+\alias{qfhtrbm}
+\alias{rfhtrbm}
 \title{The First Hitting Time Distribution}
 \usage{
-dFHTRBM(x, x0, nu, kappa, sigma, log = FALSE)
+dfhtrbm(x, x0, nu, kappa, sigma, log = FALSE)
 
-pFHTRBM(q, x0, nu, kappa, sigma)
+pfhtrbm(q, x0, nu, kappa, sigma, lower.tail = TRUE, log.p = FALSE)
 
-qFHTRBM(p, x0, nu, kappa, sigma)
+qfhtrbm(p, x0, nu, kappa, sigma, lower.tail = TRUE, log.p = FALSE)
 
-rFHTRBM(n, x0, nu, kappa, sigma, k = 3, qTail = 0.95)
+rfhtrbm(n, x0, nu, kappa, sigma)
 }
 \arguments{
-\item{x}{random values; vector}
+\item{x, q}{vector of quantiles.}
 
-\item{x0}{starting point; scalar}
+\item{x0}{scalar; starting point of the reflected Brownian motion.}
 
-\item{nu}{lower barrier; scalar}
+\item{nu}{scalar; lower boundary of the reflected Brownian motion.}
 
-\item{kappa}{upper reflection barrier; scalar}
+\item{kappa}{scalar; upper reflection barrier of the reflected Brownian
+motion.}
 
-\item{sigma}{volatility; scalar}
+\item{sigma}{scalar; volatility of the reflected Brownian motion.}
 
-\item{log}{default is FALSE}
+\item{log, log.p}{logical; default is FALSE; if TRUE, probabilities p
+are given as log(p).}
 
-\item{q}{random values; vector}
+\item{lower.tail}{logical; if TRUE (default), probabilities
+are \eqn{P[X \le x]} otherwise, \eqn{P[X > x]}.}
 
 \item{p}{vector of probabilities}
 
 \item{n}{number of observations}
-
-\item{k}{number of pieces to be included in proposal, default k = 3}
-
-\item{qTail}{the user-defined qth quantile for the tail, default q = 0.95}
 }
 \description{
 Density, distribution, quantile, and random number
@@ -45,10 +44,10 @@ Density, distribution, quantile, and random number
     of reflected Brownian motion.
 }
 \examples{
-dFHTRBM(1, 10, 3.9, 20, 3)
-dFHTRBM(c(1:5), 10, 3.9, 20, 3)
-pFHTRBM(1, 10, 3.9, 20, 3)
-pFHTRBM(c(1:5), 10, 3.9, 20, 3)
+dfhtrbm(1, 10, 3.9, 20, 3)
+dfhtrbm(c(1:5), 10, 3.9, 20, 3)
+pfhtrbm(1, 10, 3.9, 20, 3)
+pfhtrbm(c(1:5), 10, 3.9, 20, 3)
 }
 \references{
 Hu, Q., Wang, Y., and Yang, X. (2012). The hitting time density

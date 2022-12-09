@@ -143,7 +143,7 @@ can be set to be one of the three types, `Correlated`, `Independent`, or
 R package nimble and returns MCMC chain(s) for the model parameters. 
 The number of thinning, the burn-in period, and the number of iteration of 
 the MCMC chain can be set up by the user. 
-```{r, eval = FALSE}
+```{r, eval=FALSE}
 mcmc <- fitFHTRBM(Recur(time = time, id = id, event = event) ~ x1 + x2 | x1 + x2,
                   data = simuData[, -4], # remove intercept column
                   frailty = "Correlated",

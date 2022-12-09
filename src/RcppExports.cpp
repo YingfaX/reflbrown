@@ -10,9 +10,9 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// dFHTRBM_c
-NumericVector dFHTRBM_c(NumericVector t, double x0, double nu, double kappa, double sigma);
-RcppExport SEXP _rebrown_dFHTRBM_c(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
+// dfhtrbm_c
+NumericVector dfhtrbm_c(NumericVector t, double x0, double nu, double kappa, double sigma);
+RcppExport SEXP _rebrown_dfhtrbm_c(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,13 +21,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
     Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
     Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    rcpp_result_gen = Rcpp::wrap(dFHTRBM_c(t, x0, nu, kappa, sigma));
+    rcpp_result_gen = Rcpp::wrap(dfhtrbm_c(t, x0, nu, kappa, sigma));
     return rcpp_result_gen;
 END_RCPP
 }
-// pFHTRBM_c
-NumericVector pFHTRBM_c(NumericVector t, double x0, double nu, double kappa, double sigma);
-RcppExport SEXP _rebrown_pFHTRBM_c(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
+// pfhtrbm_c
+NumericVector pfhtrbm_c(NumericVector t, double x0, double nu, double kappa, double sigma);
+RcppExport SEXP _rebrown_pfhtrbm_c(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,7 +36,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
     Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
     Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    rcpp_result_gen = Rcpp::wrap(pFHTRBM_c(t, x0, nu, kappa, sigma));
+    rcpp_result_gen = Rcpp::wrap(pfhtrbm_c(t, x0, nu, kappa, sigma));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -54,9 +54,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rFHTRBM_c
-List rFHTRBM_c(int n, double x0, double nu, double kappa, double sigma, double k, double lambda_1, NumericVector t_point, NumericVector slopes, NumericVector intercepts, NumericVector M, NumericVector I, NumericVector pt_point);
-RcppExport SEXP _rebrown_rFHTRBM_c(SEXP nSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP, SEXP kSEXP, SEXP lambda_1SEXP, SEXP t_pointSEXP, SEXP slopesSEXP, SEXP interceptsSEXP, SEXP MSEXP, SEXP ISEXP, SEXP pt_pointSEXP) {
+// rfhtrbm_c
+List rfhtrbm_c(int n, double x0, double nu, double kappa, double sigma, double k, double lambda_1, NumericVector t_point, NumericVector slopes, NumericVector intercepts, NumericVector M, NumericVector I, NumericVector pt_point);
+RcppExport SEXP _rebrown_rfhtrbm_c(SEXP nSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP, SEXP kSEXP, SEXP lambda_1SEXP, SEXP t_pointSEXP, SEXP slopesSEXP, SEXP interceptsSEXP, SEXP MSEXP, SEXP ISEXP, SEXP pt_pointSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -73,7 +73,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type M(MSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type I(ISEXP);
     Rcpp::traits::input_parameter< NumericVector >::type pt_point(pt_pointSEXP);
-    rcpp_result_gen = Rcpp::wrap(rFHTRBM_c(n, x0, nu, kappa, sigma, k, lambda_1, t_point, slopes, intercepts, M, I, pt_point));
+    rcpp_result_gen = Rcpp::wrap(rfhtrbm_c(n, x0, nu, kappa, sigma, k, lambda_1, t_point, slopes, intercepts, M, I, pt_point));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -94,10 +94,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rebrown_dFHTRBM_c", (DL_FUNC) &_rebrown_dFHTRBM_c, 5},
-    {"_rebrown_pFHTRBM_c", (DL_FUNC) &_rebrown_pFHTRBM_c, 5},
+    {"_rebrown_dfhtrbm_c", (DL_FUNC) &_rebrown_dfhtrbm_c, 5},
+    {"_rebrown_pfhtrbm_c", (DL_FUNC) &_rebrown_pfhtrbm_c, 5},
     {"_rebrown_solveQuad", (DL_FUNC) &_rebrown_solveQuad, 4},
-    {"_rebrown_rFHTRBM_c", (DL_FUNC) &_rebrown_rFHTRBM_c, 13},
+    {"_rebrown_rfhtrbm_c", (DL_FUNC) &_rebrown_rfhtrbm_c, 13},
     {"_rebrown_simPath_c", (DL_FUNC) &_rebrown_simPath_c, 5},
     {NULL, NULL, 0}
 };

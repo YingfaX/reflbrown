@@ -3,18 +3,18 @@ Type: Package
 Title: Recurrent Event Modeling with reflected Brownian motion
 Version: 0.1.0
 Authors@R: c(
-    person(given = "Yingfa", family = "Xie",
-           email = "yingfa.xie@uconn.edu",
+    person(given = "Author", family = "Author",
+           email = "Author.Author@school.edu",
            role = c("aut", "cre")),
-    person(given = "Jun", family = "Yan", 
-           email = "jun.yan@uconn.edu",
+    person(given = "Author", family = "Author", 
+           email = "Author.Author@school.edu",
            role = "aut")
     )
-Date: 2022-11-27
+Date: 2022-12-08
 Description: Modeling recurrent events based on reflected Brownian motion.
-License: GPL (>= 2)
+License: GPL (>= 3)
 Encoding: UTF-8
-Imports: Rcpp (>= 1.0.9), copula, ggplot2, reda, stats, Formula
+Imports: Rcpp, copula, ggplot2, reda, stats, Formula
 LinkingTo: Rcpp
 Suggests:
     knitr,
@@ -23,5 +23,5 @@ VignetteBuilder: knitr
 RoxygenNote: 7.2.1  
 Depends: 
     nimble,
-    R (>= 2.10)
+    R (>= 4.2.0)
 LazyData: true
