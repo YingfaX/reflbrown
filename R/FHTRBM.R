@@ -15,7 +15,7 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-#' @useDynLib rebrown, .registration = TRUE
+#' @useDynLib refbrown, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom copula safeUroot
 #' @importFrom stats dexp pexp optimize

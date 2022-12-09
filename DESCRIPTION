@@ -1,4 +1,4 @@
-Package: rebrown
+Package: refbrown
 Type: Package
 Title: Recurrent Event Modeling with reflected Brownian motion
 Version: 0.1.0
