@@ -2,7 +2,8 @@
 
 export(Recur)
 export(dfhtrbm)
-export(fitFHTRBM)
+export(fitFhtrbm)
+export(getModelFit)
 export(pfhtrbm)
 export(qfhtrbm)
 export(rfhtrbm)

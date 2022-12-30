@@ -5,7 +5,7 @@
 \alias{simuCovDat}
 \title{Simulated Covariate Data Set}
 \format{
-A data frame with 200 rows and 4 variables.
+A data frame with 400 rows and 4 variables.
 }
 \description{
 A simulated data set for variables named

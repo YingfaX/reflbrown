@@ -32,22 +32,22 @@
 ##'
 ##' @docType data
 ##' @name simuCovDat
-##' @format A data frame with 200 rows and 4 variables.
+##' @format A data frame with 400 rows and 4 variables.
 NULL
 
-##' Simulated Event Time Data Set
-##'
-##' The simulated event time data set contains the calender time of the
-##' recurrent events, the event indicator and the subject covariates.
-##' \code{id}, \code{event}, \code{time}, \code{x1} and \code{x2}, where
-##' \itemize{
-##'     \item \code{id}: The patient id;
-##'     \item \code{event}: Event indicator, '1' for event, and '0' for censored;
-##'     \item \code{time}: Event or censored time;
-##'     \item \code{x1}; Continuous covariate x1;
-##'     \item \code{x2}; Continuous covariate x2;
-##' }
-##' @docType data
-##' @name simuEvtDat
-##' @format A data frame with 1677 rows and 5 variables.
-NULL
+# ##' Simulated Event Time Data Set
+# ##'
+# ##' The simulated event time data set contains the calender time of the
+# ##' recurrent events, the event indicator and the subject covariates.
+# ##' \code{id}, \code{event}, \code{time}, \code{x1} and \code{x2}, where
+# ##' \itemize{
+# ##'     \item \code{id}: The patient id;
+# ##'     \item \code{event}: Event indicator, '1' for event, and '0' for censored;
+# ##'     \item \code{time}: Event or censored time;
+# ##'     \item \code{x1}; Continuous covariate x1;
+# ##'     \item \code{x2}; Continuous covariate x2;
+# ##' }
+# ##' @docType data
+# ##' @name simuEvtDat
+# ##' @format A data frame with 1677 rows and 5 variables.
+# NULL

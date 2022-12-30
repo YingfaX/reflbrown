@@ -137,7 +137,7 @@ runMCMC_FHTRBM <- function(frailty,
                     nu = nu)
 
 
-  if (frailty == "Correlated"){
+  if (frailty == "correlated"){
     if (is.null(fit_init)){
       fit_init <- list(alpha = rep(0, fit_const$n_para_kappa),
                        beta = rep(0, fit_const$n_para_sigma),
@@ -173,7 +173,7 @@ runMCMC_FHTRBM <- function(frailty,
       gamma ~ dnorm(0, sd = 10)
     })
 
-  } else if (frailty == "Independent") {
+  } else if (frailty == "independent") {
     if (is.null(fit_init)){
       fit_init <- list(alpha = rep(0, fit_const$n_para_kappa),
                        beta = rep(0, fit_const$n_para_sigma),
@@ -206,7 +206,7 @@ runMCMC_FHTRBM <- function(frailty,
         theta[i] ~ dinvgamma(1, 1)
       }
     })
-  } else {
+  } else if (frailty == "shared"){
     if (is.null(fit_init)){
       fit_init <- list(alpha = rep(0, fit_const$n_para_kappa),
                        beta = rep(0, fit_const$n_para_kappa),
@@ -238,6 +238,33 @@ runMCMC_FHTRBM <- function(frailty,
       theta ~ dinvgamma(1, 1)
       gamma ~ dnorm(0, sd = 10)
     })
+  } else {
+    # none frailty
+    if (is.null(fit_init)){
+      fit_init <- list(alpha = rep(0, fit_const$n_para_kappa),
+                       beta = rep(0, fit_const$n_para_kappa))
+    }
+
+    fit_code <- nimble::nimbleCode({
+      for(i in 1:n_evts) {
+        x[i] ~ dFHT_lklh_nimble(event = evt[i], x0 = x0, nu = nu,
+                                kappa = kappaa[id[i]], sigma = sigmaa[id[i]])
+      }
+      for (i in 1:n_subj){
+        # z1[i] ~ dnorm(0, sd = sqrt(theta))
+        # z2[i] ~ dnorm(0, sd = sqrt(theta[2]))
+        kappaa[i] <- x0 + exp(alphaa[i])
+        sigmaa[i] <- exp(betaa[i])
+        alphaa[i] <- inprod(X_kappa[i, ], alpha[1:n_para_kappa])
+        betaa[i] <- inprod(X_sigma[i, ], beta[1:n_para_sigma])
+      }
+      for (i in 1:n_para_sigma){
+        beta[i] ~ dnorm(0, sd = 10)
+      }
+      for (i in 1:n_para_kappa){
+        alpha[i] ~ dnorm(0, sd = 10)
+      }
+    })
   }
   # print(names(fit_init))
   mcmc <- nimble::nimbleMCMC(data = fit_data,
@@ -261,15 +288,15 @@ runMCMC_FHTRBM <- function(frailty,
 
 #' @title Recurrent Events Threshold Regression
 #'
-#' @description The function fitFHTRBM return MCMC samples.
+#' @description The function fitFhtrbm return MCMC samples.
 #'
 #' @param formula   A formula object, with the response on the left
 #'     of a "~" operator, and the predictors on the right. The response must be
 #'     a recurrent event object as returned by function Recur.
 #' @param data      A data frame includes all the variables in "formula".
 #'     Data frame should not include intercept.
-#' @param frailty   Frailty type, \code{"Correlated"}, \code{"Independent"},
-#'     and \code{"StrgCorrelated"}.
+#' @param frailty   Frailty model type, \code{"correlated"}, \code{"independent"},
+#'     \code{"shared"}, and \code{"none"}.
 #' @param x0        The starting point of Brownian motion, which is a known
 #'     parameter in model.
 #' @param nu        The lower boundary of Brownian motion, which is a known
@@ -285,14 +312,14 @@ runMCMC_FHTRBM <- function(frailty,
 #' data(simuEvtDat)
 #' # need to run longer MCMC chain
 #' \dontrun{
-#' mcmc <- fitFHTRBM(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
+#' mcmc <- fitFhtrbm(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
 #'                  data = simuEvtDat,
-#'                  frailty = "Independent",
+#'                  frailty = "independent",
 #'                  thin = 10, nburnin = 3000, niter = 10000, nchains = 1)
 #' }
 #' @export
-fitFHTRBM <- function(formula, data, x0 = 10, nu = 3.9,
-                      frailty = c("Correlated", "Independent", "StrgCorrelated"),
+fitFhtrbm <- function(formula, data, x0 = 10, nu = 3.9,
+                      frailty = c("correlated", "independent", "shared", "none"),
                       initial = NULL,
                       thin = 10, nburnin = 3000, niter = 6000, nchains = 1){
   frailty <- match.arg(frailty)

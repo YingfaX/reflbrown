@@ -1,6 +1,6 @@
 ---
 title: "Introduction to refbrown through Examples"
-author: Yingfa Xie
+author: Author
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_document:
@@ -106,21 +106,18 @@ set records the calender time of the events for each subject.
 
 
 ```{r}
-size <- 200
-x1 <- rnorm(size)                
-x2 <- rpois(size, 2) + 0.5 * x1 + runif(size)
-X <- data.frame("x1" = x1,
-                "x2" = x2)
-X <- scale(X)
-# simulate event time data set from independent frailty model
-simuData <- simData(size = size, 
-                    endTime = round(runif(size, 160, 180)),
-                    X = cbind("Intercept" = rep(1, size), X),
-                    sigmaCoef = c(1, 0.2, -0.2),
-                    kappaCoef = c(3, 0.1, 0.3),
-                    gamma = 0, 
+data(simuCovDat)
+size <- nrow(simuCovDat)
+Intercept <- rep(1, size)
+# simulate event (gap) time from correlated frailty model
+simuData <- simData(size = size,
+                    endTime = simuCovDat$censorTime,
+                    X = cbind(Intercept, as.matrix(simuCovDat[, c("x1", "x2")])),
+                    sigmaCoef = c(0.9, -0.2, -0.1),
+                    kappaCoef = c(2.9, 0.2, -0.1),
                     theta = c(0.2, 0.3),
-                    x0 = 10, nu = 3.9)
+                    gamma = -0.4, x0 = 10, nu = 3.9)
+
 ```
 
 
@@ -138,18 +135,37 @@ The formula for the FHT model is given as
 The left hand side of the vertical bar is given as the covariates incorporated 
 into volatility $\sigma$ while the right hand side is given as the covariates 
 incorporated into upper reflection barrier $\kappa$. The frailty argument 
-can be set to be one of the three types, `Correlated`, `Independent`, or 
-`StrgCorrelated`. The function `fitFHTRBM` implements the MCMC with
+can be set to be one of the three types, `correlated`, `independent`, 
+`shared` or `none`. The function `fitFHTRBM` implements the MCMC with
 R package nimble and returns MCMC chain(s) for the model parameters. 
 The number of thinning, the burn-in period, and the number of iteration of 
 the MCMC chain can be set up by the user. 
 ```{r, eval=FALSE}
-mcmc <- fitFHTRBM(Recur(time = time, id = id, event = event) ~ x1 + x2 | x1 + x2,
+mcmc <- fitFhtrbm(Recur(time = time, id = id, event = event) ~ x1 + x2 | x1 + x2,
                   data = simuData[, -4], # remove intercept column
-                  frailty = "Correlated",
+                  frailty = "correlated",
                   thin = 10, nburnin = 2000, niter = 10000, nchains = 1)
 ```
 
+
+## Model Comparison
+To calculate the model comparison criteria, one could use function 
+`getModelFit()`. The output of the function gives Deviance Information Criterion 
+(DIC) and the Logarithm of the Pseudo-Marginal Likelihood (LPML). The DIC and 
+LPML are calculated based on the observed likelihood. Monte Carlo integration 
+is used for approximating the observed likelihood. Here is an example of 
+calculating the DIC and LPML of correlated frailty model using the MCMC result 
+above.
+```{r, eval=FALSE}
+#' # using the MCMC from fitFHTRBM function
+ret <- getModelFit(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
+                   data = simuData[, -4], # remove intercept column
+                   frailty = "correlated",
+                   mcmc_sigma = mcmc[, c(4:6)],
+                   mcmc_kappa = mcmc[, c(1:3)],
+                   mcmc_gamma = mcmc[, 7],
+                   mcmc_theta = mcmc[, c(8:9)])
+```
 
 # Reference
 

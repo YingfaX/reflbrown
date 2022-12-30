@@ -10,12 +10,14 @@ Authors@R: c(
            email = "Author.Author@school.edu",
            role = "aut")
     )
-Date: 2022-12-08
+Date: 2022-12-29
 Description: Modeling recurrent events based on reflected Brownian motion.
 License: GPL (>= 3)
 Encoding: UTF-8
 Imports: Rcpp, copula, ggplot2, reda, stats, Formula
-LinkingTo: Rcpp
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
 Suggests:
     knitr,
     rmarkdown
