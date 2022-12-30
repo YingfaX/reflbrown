@@ -155,7 +155,7 @@ To calculate the model comparison criteria, one could use function
 LPML are calculated based on the observed likelihood. Monte Carlo integration 
 is used for approximating the observed likelihood. Here is an example of 
 calculating the DIC and LPML of correlated frailty model using the MCMC result 
-above.
+above. 
 ```{r, eval=FALSE}
 #' # using the MCMC from fitFHTRBM function
 ret <- getModelFit(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
@@ -163,7 +163,7 @@ ret <- getModelFit(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
                    frailty = "correlated",
                    mcmc_sigma = mcmc[, c(4:6)],
                    mcmc_kappa = mcmc[, c(1:3)],
-                   mcmc_gamma = mcmc[, 7],
+                   mcmc_gamma = as.matrix(mcmc[, 7]),
                    mcmc_theta = mcmc[, c(8:9)])
 ```
 
