@@ -95,14 +95,14 @@ sim_list <- simPath(x0 = 10, nu = 3.9, kappa = 20, sigma = 1.5,
 
 ## Simulate event (gap) times 
 The `simData()` is used for simulating event (gap) time for subject given the
-covariate. For simulating from the full model, one can assign value for the 
-regression coefficients in $\sigma$ and $\kappa$, 
+covariates. For simulating from the correlated-frailty model, one can 
+assign value for the regression coefficients in $\sigma$ and $\kappa$, 
 the coefficient of the frailty $\gamma$, 
 and the frailty variance $\boldsymbol{\theta}$. One can simulate the event time
-from independent frailty model by assigning $\gamma = 0$. Furthermore, if the 
-same frailty term is attempted to set in both $\sigma$ and $\kappa$, one can 
-assign the second element of $\boldsymbol{\theta}$ to be $0$. The simulated data 
-set records the calender time of the events for each subject.
+from independent-frailty model by assigning $\gamma = 0$. Furthermore, if the 
+shared-frailty model is attempted, one can 
+assign the second element of $\boldsymbol{\theta}$ to be $0$. The simulated 
+dataset records the calender time of the events for each subject.
 
 
 ```{r}
@@ -121,7 +121,7 @@ simuData <- simData(size = size,
 ```
 
 
-The simulated data contains `time`, `id`, `status`, and covariate. 
+The simulated dataset contains `time`, `id`, `status`, and covariate. 
 ```{r}
 head(simuData, 10)
 ```

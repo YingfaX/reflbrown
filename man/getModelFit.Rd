@@ -63,13 +63,14 @@ Monte Carlo integration is used for approximating the observed likelihood.
 }
 \examples{
 \dontrun{
-# using the MCMC from fitFHTRBM function
+# using the MCMC from fitFhtrbm function
 ret <- getModelFit(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
                    data = simuEvtDat,
-                   frailty = "independent",
+                   frailty = "correlated",
                    mcmc_sigma = mcmc[, c(4:6)],
                    mcmc_kappa = mcmc[, c(1:3)],
-                   mcmc_theta = mcmc[, c(7:8)])
+                   mcmc_gamma = as.matrix(mcmc[, 7]), # need matrix
+                   mcmc_theta = mcmc[, c(8:9)])
 }
 
 }

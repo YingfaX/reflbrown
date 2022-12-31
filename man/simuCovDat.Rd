@@ -18,6 +18,6 @@ A simulated data set for variables named
 }
 }
 \details{
-The sample dataset contains the subject level covariates generated from
+The sample dataset contains the subject-level covariates generated from
 the fitted Copula model.
 }

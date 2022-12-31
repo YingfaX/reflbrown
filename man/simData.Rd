@@ -80,7 +80,7 @@ simuDat <- simData(size = size,
                    sigmaCoef = c(0.9, -0.2, -0.1),
                    kappaCoef = c(2.9, 0.2, -0.1),
                    theta = c(0.2, 0.3),
-                   gamma = 0,
+                   gamma = -0.4,
                    x0 = 10,
                    nu = 3.9)
 

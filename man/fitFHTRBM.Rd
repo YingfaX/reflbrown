@@ -52,10 +52,11 @@ The function fitFhtrbm return MCMC samples.
 \examples{
 data(simuEvtDat)
 # need to run longer MCMC chain
+# note that simuEvtDat dataset does not include intercept column
 \dontrun{
 mcmc <- fitFhtrbm(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
                  data = simuEvtDat,
-                 frailty = "independent",
+                 frailty = "correlated",
                  thin = 10, nburnin = 3000, niter = 10000, nchains = 1)
 }
 }
