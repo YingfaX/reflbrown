@@ -1,5 +1,5 @@
 ---
-title: "Introduction to refbrown through Examples"
+title: "Introduction to reflbrown through Examples"
 author: Author
 date: "`r Sys.Date()`"
 output:
@@ -7,19 +7,19 @@ output:
     toc: true
     toc_depth: 2
     toc_float: true
-bibliography: ../inst/bib/refbrown.bib
+bibliography: ../inst/bib/reflbrown.bib
 vignette: >
-  %\VignetteIndexEntry{Introduction to refbrown through Examples}
+  %\VignetteIndexEntry{Introduction to reflbrown through Examples}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 In this vignettes, we briefly introduce how to explore recurrent event data by 
-first hitting time model of reflected Brownian motion (RBM) with the **refbrown** 
-package. The **refbrown** package implements the density, distribution, quantile, 
+first hitting time model of reflected Brownian motion (RBM) with the **reflbrown** 
+package. The **reflbrown** package implements the density, distribution, quantile, 
 and random number generation function of the first hitting time (FHT) distribution 
 (hitting down case) of RBM [@hu2012hitting]. The function `simData()` 
-in **refbrown** can be used for simulating recurrent event (gap) times. 
+in **reflbrown** can be used for simulating recurrent event (gap) times. 
 Fitting recurrent data set with FHT model is implemented with `fitFHTRBM()`. 
 The sample paths of the reflected Brownian motion can be simulated with 
 `simPath()` function, which helps to illustrate when an event occur.
@@ -73,10 +73,14 @@ regression coefficient vectors, and $Z_{i1}$ and $Z_{i2}'$ are
 normal random effects with mean zero,
 variance $\theta_1$ and $\theta_2'$, respectively.
 
+## Installation
+```{r, message=FALSE, eval=FALSE}
+install.packages("./reflbrown_0.1.0.tar.gz", repos = NULL, type ='source')
+```
 
 ## Getting started
 ```{r, message=FALSE}
-library(refbrown)
+library(reflbrown)
 set.seed(1)
 ```
 
@@ -167,5 +171,5 @@ ret <- getModelFit(Recur(time = time, id = id, event = event) ~ x1 + x2|x1 + x2,
                    mcmc_theta = mcmc[, c(8:9)])
 ```
 
-# Reference
+<!-- # Reference -->
 

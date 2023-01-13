@@ -1,21 +1,21 @@
 ##
-## R package refbrown by Author and Author
+## R package reflbrown by Author and Author
 ## Copyright (C) 2022
 ##
-## This file is part of the R package refbrown.
+## This file is part of the R package reflbrown.
 ##
-## The R package refbrown is free software: You can redistribute it and/or
+## The R package reflbrown is free software: You can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or any later
 ## version (at your option). See the GNU General Public License at
 ## <https://www.gnu.org/licenses/> for details.
 ##
-## The R package refbrown is distributed in the hope that it will be useful,
+## The R package reflbrown is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-#' @useDynLib refbrown, .registration = TRUE
+#' @useDynLib reflbrown, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom copula safeUroot
 #' @importFrom stats dexp pexp optimize

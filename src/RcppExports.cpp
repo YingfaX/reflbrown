@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // dfhtrbm_c
 NumericVector dfhtrbm_c(NumericVector t, double x0, double nu, double kappa, double sigma);
-RcppExport SEXP _refbrown_dfhtrbm_c(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
+RcppExport SEXP _reflbrown_dfhtrbm_c(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -28,7 +28,7 @@ END_RCPP
 }
 // pfhtrbm_c
 NumericVector pfhtrbm_c(NumericVector t, double x0, double nu, double kappa, double sigma);
-RcppExport SEXP _refbrown_pfhtrbm_c(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
+RcppExport SEXP _reflbrown_pfhtrbm_c(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -43,7 +43,7 @@ END_RCPP
 }
 // solveQuad
 NumericVector solveQuad(double slope, double intercept, double t_start, double u);
-RcppExport SEXP _refbrown_solveQuad(SEXP slopeSEXP, SEXP interceptSEXP, SEXP t_startSEXP, SEXP uSEXP) {
+RcppExport SEXP _reflbrown_solveQuad(SEXP slopeSEXP, SEXP interceptSEXP, SEXP t_startSEXP, SEXP uSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -57,7 +57,7 @@ END_RCPP
 }
 // rfhtrbm_c
 List rfhtrbm_c(int n, double x0, double nu, double kappa, double sigma, double k, double lambda_1, NumericVector t_point, NumericVector slopes, NumericVector intercepts, NumericVector M, NumericVector I, NumericVector pt_point);
-RcppExport SEXP _refbrown_rfhtrbm_c(SEXP nSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP, SEXP kSEXP, SEXP lambda_1SEXP, SEXP t_pointSEXP, SEXP slopesSEXP, SEXP interceptsSEXP, SEXP MSEXP, SEXP ISEXP, SEXP pt_pointSEXP) {
+RcppExport SEXP _reflbrown_rfhtrbm_c(SEXP nSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP, SEXP kSEXP, SEXP lambda_1SEXP, SEXP t_pointSEXP, SEXP slopesSEXP, SEXP interceptsSEXP, SEXP MSEXP, SEXP ISEXP, SEXP pt_pointSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -80,7 +80,7 @@ END_RCPP
 }
 // pfhtrbm_c_db
 double pfhtrbm_c_db(double t, double x0, double nu, double kappa, double sigma);
-RcppExport SEXP _refbrown_pfhtrbm_c_db(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
+RcppExport SEXP _reflbrown_pfhtrbm_c_db(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -95,7 +95,7 @@ END_RCPP
 }
 // lklhSubj
 double lklhSubj(NumericVector t, NumericVector event, double x0, double nu, double kappa, double sigma);
-RcppExport SEXP _refbrown_lklhSubj(SEXP tSEXP, SEXP eventSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
+RcppExport SEXP _reflbrown_lklhSubj(SEXP tSEXP, SEXP eventSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -111,7 +111,7 @@ END_RCPP
 }
 // obsLklh_c
 NumericVector obsLklh_c(NumericVector t, NumericVector event, arma::vec covar_sigma, arma::vec covar_kappa, arma::mat mcmc_sigma, arma::mat mcmc_kappa, arma::mat mcmc_gamma, arma::mat mcmc_theta, arma::vec mc_z1, arma::vec mc_z2, String frailty, double x0, double nu);
-RcppExport SEXP _refbrown_obsLklh_c(SEXP tSEXP, SEXP eventSEXP, SEXP covar_sigmaSEXP, SEXP covar_kappaSEXP, SEXP mcmc_sigmaSEXP, SEXP mcmc_kappaSEXP, SEXP mcmc_gammaSEXP, SEXP mcmc_thetaSEXP, SEXP mc_z1SEXP, SEXP mc_z2SEXP, SEXP frailtySEXP, SEXP x0SEXP, SEXP nuSEXP) {
+RcppExport SEXP _reflbrown_obsLklh_c(SEXP tSEXP, SEXP eventSEXP, SEXP covar_sigmaSEXP, SEXP covar_kappaSEXP, SEXP mcmc_sigmaSEXP, SEXP mcmc_kappaSEXP, SEXP mcmc_gammaSEXP, SEXP mcmc_thetaSEXP, SEXP mc_z1SEXP, SEXP mc_z2SEXP, SEXP frailtySEXP, SEXP x0SEXP, SEXP nuSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -134,7 +134,7 @@ END_RCPP
 }
 // simPath_c
 List simPath_c(double x0, double nu, double kappa, double sigma, NumericVector dt);
-RcppExport SEXP _refbrown_simPath_c(SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP, SEXP dtSEXP) {
+RcppExport SEXP _reflbrown_simPath_c(SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP, SEXP dtSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -149,18 +149,18 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_refbrown_dfhtrbm_c", (DL_FUNC) &_refbrown_dfhtrbm_c, 5},
-    {"_refbrown_pfhtrbm_c", (DL_FUNC) &_refbrown_pfhtrbm_c, 5},
-    {"_refbrown_solveQuad", (DL_FUNC) &_refbrown_solveQuad, 4},
-    {"_refbrown_rfhtrbm_c", (DL_FUNC) &_refbrown_rfhtrbm_c, 13},
-    {"_refbrown_pfhtrbm_c_db", (DL_FUNC) &_refbrown_pfhtrbm_c_db, 5},
-    {"_refbrown_lklhSubj", (DL_FUNC) &_refbrown_lklhSubj, 6},
-    {"_refbrown_obsLklh_c", (DL_FUNC) &_refbrown_obsLklh_c, 13},
-    {"_refbrown_simPath_c", (DL_FUNC) &_refbrown_simPath_c, 5},
+    {"_reflbrown_dfhtrbm_c", (DL_FUNC) &_reflbrown_dfhtrbm_c, 5},
+    {"_reflbrown_pfhtrbm_c", (DL_FUNC) &_reflbrown_pfhtrbm_c, 5},
+    {"_reflbrown_solveQuad", (DL_FUNC) &_reflbrown_solveQuad, 4},
+    {"_reflbrown_rfhtrbm_c", (DL_FUNC) &_reflbrown_rfhtrbm_c, 13},
+    {"_reflbrown_pfhtrbm_c_db", (DL_FUNC) &_reflbrown_pfhtrbm_c_db, 5},
+    {"_reflbrown_lklhSubj", (DL_FUNC) &_reflbrown_lklhSubj, 6},
+    {"_reflbrown_obsLklh_c", (DL_FUNC) &_reflbrown_obsLklh_c, 13},
+    {"_reflbrown_simPath_c", (DL_FUNC) &_reflbrown_simPath_c, 5},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_refbrown(DllInfo *dll) {
+RcppExport void R_init_reflbrown(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

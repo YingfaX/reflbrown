@@ -1,9 +1,3 @@
-# refbrown
+# reflbrown
 
-## Install
-
-```R
-devtools::install_github("YingfaX/refbrown",
-                         ref="main",
-                         auth_token = "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")
-```
+R package reflbrown is private now but will be available in public in the future.
