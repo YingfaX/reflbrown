@@ -38,7 +38,9 @@ NULL
 ##' Simulated Event Time Data Set
 ##'
 ##' The simulated event time data set contains the calender time of the
-##' recurrent events, the event indicator and the subject covariates.
+##' recurrent events, the event indicator and the subject covariates. The
+##' dataset is simulated from independent-frailty model. Gap times between
+##' recurrent events need further calculation.
 ##' \code{id}, \code{event}, \code{time}, \code{x1} and \code{x2}, where
 ##' \itemize{
 ##'     \item \code{id}: The patient id;
@@ -49,5 +51,5 @@ NULL
 ##' }
 ##' @docType data
 ##' @name simuEvtDat
-##' @format A data frame with 3779 rows and 5 variables.
+##' @format A data frame with 3357 rows and 5 variables.
 NULL

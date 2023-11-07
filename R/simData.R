@@ -30,18 +30,18 @@ NULL
 #' @param X          The covariates matrix for patients.
 #'     This argument should be a matrix which records the covariate vector of
 #'     subject $i$ in row i.
-#' @param kappaCoef  The coefficents of upper reflection barrier.
-#'     This argument should be a numeric vector.
 #' @param sigmaCoef  The coefficents of volatility.
 #'     This argument should be a numeric vector.
-#' @param theta      The variance of frailties.
-#'     This argument should be a numeric vector with length $2$.
+#' @param kappaCoef  The coefficents of upper reflection barrier.
+#'     This argument should be a numeric vector.
 #' @param gamma      The coefficient of frailty.
 #'     This argument should be a numeric value.
 #' @param x0         The starting point of the reflected Brownian motion.
 #'     This argument should be a numeric value.
 #' @param nu         The lower boundary of the reflected Brownian motion.
 #'     This argument should be a numeric value.
+#' @param theta      The variance of frailties.
+#'     This argument should be a numeric vector with length $2$.
 #' @param sigmaZ     The frailty in sigma, default is NULL.
 #'     This argument should be a numeric vector.
 #' @param kappaZ     The frailty in kappa, default is NULL.
@@ -53,6 +53,8 @@ NULL
 #' @param event_num  The number of simulated random gap times for one patients.
 #'     Only the cumulative random gap times smaller the follow up time are
 #'     saved as output. This argument should be a numeric value.
+#' @param FrailtyZ  Report frailty in the output dataframe or not. Default is False.
+#'
 #' @examples
 #' data(simuCovDat)
 #' size <- nrow(simuCovDat)
@@ -63,10 +65,10 @@ NULL
 #'                    X = cbind(Intercept, as.matrix(simuCovDat[, c("x1", "x2")])),
 #'                    sigmaCoef = c(0.9, -0.2, -0.1),
 #'                    kappaCoef = c(2.9, 0.2, -0.1),
-#'                    theta = c(0.2, 0.3),
 #'                    gamma = -0.4,
 #'                    x0 = 10,
-#'                    nu = 3.9)
+#'                    nu = 3.9,
+#'                    theta = c(0.2, 0.3))
 #'
 #' head(simuDat)
 #'
@@ -76,61 +78,78 @@ simData <- function(size,
                     X,
                     sigmaCoef,
                     kappaCoef,
-                    theta,
-                    gamma,
-                    x0,
-                    nu,
+                    gamma, x0, nu,
+                    theta = NULL,
                     sigmaZ = NULL,
                     kappaZ = NULL,
                     roundTime = TRUE,
                     gapTime = FALSE,
-                    event_num = 500){
+                    event_num = 500,
+                    FrailtyZ = FALSE){
   if (is.null(sigmaZ)){
+    # print("Generating frailty")
     sigmaZ <- rnorm(size, mean = 0, sd = sqrt(theta[1]))
   }
+  # print(sigmaZ[1:5])
   sigmas <- exp(X %*% sigmaCoef + sigmaZ)
 
   if (is.null(kappaZ)){
     kappaZ <- rnorm(size, mean = 0, sd = sqrt(theta[2]))
   }
+  # print(kappaZ[1:5])
   kappas <- x0 + exp(X %*% kappaCoef + gamma * sigmaZ + kappaZ)
 
   # generate hypo-event time and set status
   dat_evt <- data.frame('id' = NA, 'event' = NA,'time' = NA)
   for (i in 1:size){
-    simGapTimes <- rfhtrbm(n = event_num, x0 = x0, nu = nu, kappa = kappas[i],
-                        sigma = sigmas[i])
-    if (roundTime) {
-      simGapTimes <- round(simGapTimes)
-    }
+    simGapTimes <- rfhtrbm(n = event_num, x0 = x0, nu = nu,
+                           kappa = kappas[i], sigma = sigmas[i])
+
+    # find index
     time <- cumsum(simGapTimes)
     time_end_indx <- which(cumsum(simGapTimes) >= endTime[i])[1]
     time <- time[1:time_end_indx]
-    time[time_end_indx] <- endTime[i]
-    if (gapTime) {
-      time <- simGapTimes[1:time_end_indx]
-      time[length(time)] <- endTime[i] - sum(time[1:(time_end_indx - 1)] )
-    }
 
-    # set event status
+    if (time_end_indx == 1) {
+      time[time_end_indx] <- round(endTime[i])
+    } else {
+      time <- simGapTimes[1:time_end_indx]
+      time[time_end_indx] <- endTime[i] - sum(time[1:(time_end_indx - 1)])
+
+      if (!roundTime) {
+        if (!gapTime) {
+          time <- cumsum(time)
+        }
+      } else {
+        time <- round(time)
+        if (!gapTime) {
+          time <- cumsum(time)
+        }
+      }
+    }
     event <- c(rep(1, length(time) - 1), 0)
     dat_evt_new <- data.frame('id' = rep(i, length(time)),
                               'event' = event,
                               'time' = time)
-
-    # combine event times for all patients
     dat_evt <- rbind(dat_evt, dat_evt_new)
   }
 
-  # remove first row
   dat_evt <- dat_evt[!is.na(dat_evt$time), ]
-  # merge hypo-event time and covariates
   X <- data.frame(X)
-  # colnames(X) <- paste0("x", c(1:ncol(X)))
   X$id <- c(1:size)
   dat_sim <- merge(dat_evt, X, by = 'id')
+
+  if (FrailtyZ) {
+    dat_frailty_out <- data.frame('id' = c(1:size),
+                                  'Fsigma' = sigmaZ,
+                                  'Fkappa' = kappaZ)
+    dat_sim <- merge(dat_sim, dat_frailty_out, by = 'id', all.x = TRUE)
+  }
+
   return(dat_sim)
 }
+
+
 
 
 

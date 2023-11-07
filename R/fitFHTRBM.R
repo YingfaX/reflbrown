@@ -24,73 +24,78 @@
 NULL
 
 
-## cdf of FHT distribution of reflected Brownian motion
-pFHT_nimble <- nimble::nimbleFunction(
-  run = function(x = double(0),
-                 x0 = double(0), nu = double(0), kappa = double(0),
-                 sigma = double(0), log = integer(0, default = 0)){
-    returnType(double(0))
-    if (x <= 0){
-      if(log) return(log(0))
-      else return(0)
-    }
-
-    n <- 1; smt <- 0; temp <- 1
-    ## cdf
-    while ( abs(temp) > 0) {
-      lambda_n <- (2 * n - 1)^2 * sigma^2 * pi^2 / (8 * (kappa - nu)^2)
-      c_n <- (-1)^(n + 1) * 4 * cos((2 * n - 1) * pi * (kappa - x0) /
-                                      (2 * (kappa - nu))) /((2 * n - 1) * pi)
-      temp <- c_n * exp(-lambda_n * x)
-      smt <- smt + temp
-      n <- n + 1
-    }
-    cprob <- 1 - smt
-
-    if (cprob < 0) cprob = 0
-    if (cprob > 1) cprob = 1
-    logProb = log(cprob)
-    if(log) return(logProb)
-    else return(exp(logProb))
-  })
-
-
-dFHT_lklh_nimble <- nimble::nimbleFunction(
+## using cdf of FHT distribution of reflected Brownian motion
+## to construct interval-censored likelihood
+dFHT_lklh_nimble <- nimbleFunction(
   run = function(x = double(0), event = double(0),
-                 x0 = double(0), nu = double(0), kappa = double(0),
-                 sigma = double(0), log = integer(0, default = 0)){
+                 x0 = double(0), nu = double(0), kappa = double(0), sigma = double(0),
+                 log = integer(0, default = 0)){
     returnType(double(0))
 
     unit <- 1
-    x_intv_end <- x + unit/2
-    x_intv_start <- x - unit/2
+    x_intv_end <- x + unit/2; #print(x_intv_end)
+    x_intv_start <- x - unit/2;# print(x_intv_start)
+
+    lambda_constant <- sigma^2 * pi^2 / (8 * (kappa - nu)^2)
+    c_constant <- pi * (kappa - x0) / (2 * (kappa - nu))
 
     if (event == 1){
-      ## interval censored
-      lklh <- pFHT_nimble(x_intv_end, x0, nu, kappa, sigma) -
-        pFHT_nimble(x_intv_start, x0, nu, kappa, sigma)
+      n <- 1.0; smt <- 0.0; diff_temp <- 1.0
+      if(x_intv_start >= 0.0) {
+        while (abs(diff_temp) > 0) {
+          lambda_n <- (2 * n - 1)^2 * lambda_constant
+          c_n <- (-1)^(n + 1) * 4 * cos((2 * n - 1) * c_constant) / ((2 * n - 1) * pi)
+          diff_temp <- c_n * exp(-lambda_n * x_intv_start) - c_n * exp(-lambda_n * x_intv_end)
+          smt <- smt + diff_temp
+          n <- n + 1
+        }
+      } else {
+        ## for negative x_start
+        while (abs(diff_temp) > 0.0) {
+          lambda_n <- (2 * n - 1)^2 * lambda_constant
+          c_n <- (-1)^(n + 1) * 4 * cos((2 * n - 1) * c_constant) / ((2 * n - 1) * pi)
+          diff_temp <- c_n * exp(-lambda_n * x_intv_end)
+          smt <- smt + diff_temp
+          n <- n + 1
+        }
+        # smt <- 1 - smt
+        if (0 <= (1-smt) & (1-smt) <= 1) {
+          smt = 1-smt
+        } else if (1 < (1-smt)) {
+          smt = 1
+        } else {
+          smt = 0
+        }
+      }
+      lklh <- smt
     } else {
       ## survival probability
-      lklh <- 1 - pFHT_nimble(x_intv_end, x0, nu, kappa, sigma)
+      n <- 1; smt <- 0; diff_temp <- 1
+      while ( abs(diff_temp) > 0) {
+        lambda_n <- (2 * n - 1)^2 * lambda_constant
+        c_n <- (-1)^(n + 1) * 4 * cos((2 * n - 1) * c_constant) / ((2 * n - 1) * pi)
+        diff_temp <- c_n * exp(-lambda_n * x_intv_end)
+        smt <- smt + diff_temp
+        n <- n + 1
+      }
+      lklh <- smt
     }
-
-
     logProb = log(lklh)
     if(log) return(logProb)
     else return(exp(logProb))
   })
 
 
-rFHT_lklh_nimble <- nimble::nimbleFunction(
+rFHT_lklh_nimble <- nimbleFunction(
   run = function(n = double(0), event = double(0),
                  x0 = double(0), nu = double(0),
                  kappa = double(0), sigma = double(0)){
     returnType(double(0))
     # if(n != 1) print("rmyexp only allows n = 1; using n = 1.")
     cand <- rexp_nimble(1, 0.04) + 0.3
-    # cand <- rexp_nimble(1, 0.04) + 3
     return(cand)
   })
+
 
 
 runMCMC_FHTRBM <- function(frailty,
@@ -102,7 +107,7 @@ runMCMC_FHTRBM <- function(frailty,
   # 1: global environment
   pos <- 1
   envir = as.environment(pos)
-  assign('pFHT_nimble', pFHT_nimble, envir = envir)
+  # assign('pFHT_nimble', pFHT_nimble, envir = envir)
   assign('rFHT_lklh_nimble', rFHT_lklh_nimble, envir = envir)
   assign('dFHT_lklh_nimble', dFHT_lklh_nimble, envir = envir)
 
@@ -138,9 +143,10 @@ runMCMC_FHTRBM <- function(frailty,
 
 
   if (frailty == "correlated"){
+    print(paste('Fitting Model Type:', frailty))
     if (is.null(fit_init)){
-      fit_init <- list(alpha = rep(0, fit_const$n_para_kappa),
-                       beta = rep(0, fit_const$n_para_sigma),
+      fit_init <- list(alpha = c(1, rep(0, fit_const$n_para_kappa-1)),
+                       beta = c(1, rep(0, fit_const$n_para_sigma-1)),
                        gamma = 0,
                        theta = c(0.2, 0.2),
                        z1 = rnorm(fit_const$n_subj, 0, 0.1),
@@ -174,9 +180,10 @@ runMCMC_FHTRBM <- function(frailty,
     })
 
   } else if (frailty == "independent") {
+    print(paste('Fitting Model Type:', frailty))
     if (is.null(fit_init)){
-      fit_init <- list(alpha = rep(0, fit_const$n_para_kappa),
-                       beta = rep(0, fit_const$n_para_sigma),
+      fit_init <- list(alpha = c(1, rep(0, fit_const$n_para_kappa-1)),
+                       beta = c(1, rep(0, fit_const$n_para_sigma-1)),
                        theta = c(0.2, 0.2),
                        z1 = rnorm(fit_const$n_subj, 0, 0.1),
                        z2 = rnorm(fit_const$n_subj, 0, 0.1))
@@ -207,9 +214,10 @@ runMCMC_FHTRBM <- function(frailty,
       }
     })
   } else if (frailty == "shared"){
+    print(paste('Fitting Model Type:', frailty))
     if (is.null(fit_init)){
-      fit_init <- list(alpha = rep(0, fit_const$n_para_kappa),
-                       beta = rep(0, fit_const$n_para_kappa),
+      fit_init <- list(alpha = c(1, rep(0, fit_const$n_para_kappa-1)),
+                       beta = c(1, rep(0, fit_const$n_para_sigma-1)),
                        gamma = 0,
                        theta = 0.2,
                        z1 = rnorm(fit_const$n_subj, 0, 0.1))
@@ -239,10 +247,11 @@ runMCMC_FHTRBM <- function(frailty,
       gamma ~ dnorm(0, sd = 10)
     })
   } else {
+    print(paste('Fitting Model Type:', frailty))
     # none frailty
     if (is.null(fit_init)){
-      fit_init <- list(alpha = rep(0, fit_const$n_para_kappa),
-                       beta = rep(0, fit_const$n_para_kappa))
+      fit_init <- list(alpha = c(1, rep(0, fit_const$n_para_kappa-1)),
+                       beta = c(1, rep(0, fit_const$n_para_sigma-1)))
     }
 
     fit_code <- nimble::nimbleCode({
@@ -266,17 +275,16 @@ runMCMC_FHTRBM <- function(frailty,
       }
     })
   }
-  # print(names(fit_init))
+  # print(fit_init)
   mcmc <- nimble::nimbleMCMC(data = fit_data,
-                     constants = fit_const,
-                     inits = fit_init,
-                     code = fit_code,
-                     monitors = names(fit_init),
-                     thin = thin,
-                     niter = niter,
-                     nburnin = nburnin,
-                     nchains = nchains,
-                     setSeed = TRUE)
+                             constants = fit_const,
+                             inits = fit_init,
+                             code = fit_code,
+                             monitors = names(fit_init),
+                             thin = thin,
+                             niter = niter,
+                             nburnin = nburnin,
+                             nchains = nchains)
   colnames(mcmc)[grepl("alpha|beta", colnames(mcmc))] <-
     c(paste0(coef_kappa_name, "_Kappa"), paste0(coef_sigma_name, "_Sigma"))
   colnames(mcmc)[grepl("theta", colnames(mcmc))] <-
@@ -319,8 +327,9 @@ runMCMC_FHTRBM <- function(frailty,
 #'                  thin = 10, nburnin = 3000, niter = 10000, nchains = 1)
 #' }
 #' @export
-fitFhtrbm <- function(formula, data, x0 = 10, nu = 3.9,
+fitFhtrbm <- function(formula, data,
                       frailty = c("correlated", "independent", "shared", "none"),
+                      x0 = 10, nu = 3.9,
                       initial = NULL,
                       thin = 10, nburnin = 3000, niter = 6000, nchains = 1){
   frailty <- match.arg(frailty)
@@ -348,7 +357,6 @@ fitFhtrbm <- function(formula, data, x0 = 10, nu = 3.9,
   obj <- as.data.frame(obj)
   obj$gapt <- obj$time2 - obj$time1
   obj <- obj[, c("gapt", "id", "event")]
-
   # set up nimble model code
   mcmc <- runMCMC_FHTRBM(frailty = frailty,
                          obj_df = obj,
@@ -357,10 +365,10 @@ fitFhtrbm <- function(formula, data, x0 = 10, nu = 3.9,
                          fit_init = initial,
                          x0 = x0,
                          nu = nu,
-                        thin = thin,
-                        nburnin = nburnin,
-                        niter = niter,
-                        nchains = nchains)
+                         thin = thin,
+                         nburnin = nburnin,
+                         niter = niter,
+                         nchains = nchains)
   return(mcmc)
 }
 

@@ -21,7 +21,7 @@ NumericVector dfhtrbm_c(NumericVector t,
     // do infinite sum of series
     while (std::abs(temp_k) > 0.0) {
       lambda_k = pow((2 * k - 1), 2) * pow(sigma, 2) *
-        pow(M_PI, 2) / (8 * pow(kappa - nu, 2));
+        pow(M_PI, 2) / (8 * pow((kappa - nu), 2));
       c_k = pow(-1, k + 1) * 4  / ((2 * k - 1) * M_PI) *
         cos((2 * k - 1) * M_PI * (kappa - x0) / (2 * (kappa - nu)));
       temp_k = c_k * lambda_k * exp(- lambda_k * t[i]);

@@ -133,7 +133,7 @@ getModelFit <- function(formula,
   }
 
   mcmc_post_mean_sigma <- matrix(as.numeric(apply(mcmc_sigma, 2, mean)),
-                                    ncol = ncol(mcmc_sigma), byrow = TRUE)
+                                 ncol = ncol(mcmc_sigma), byrow = TRUE)
   mcmc_post_mean_kappa <- matrix(as.numeric(apply(mcmc_kappa, 2, mean)),
                                  ncol = ncol(mcmc_kappa), byrow = TRUE)
   mcmc_post_mean_gamma <- matrix(as.numeric(apply(mcmc_gamma, 2, mean)),
@@ -165,6 +165,7 @@ getModelFit <- function(formula,
                                                              mc_z[, 1],
                                                              mc_z[, 2],
                                                              frailty, x0, nu))
+    # print(loglklh_matrix_subj[c(1:mcmc_niter), i])
     loglklh_matrix_subj[(1+mcmc_niter), i] <- log(obsLklh_c(gapt_subj,
                                                             event_subj,
                                                             covar_sigma,

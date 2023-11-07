@@ -100,7 +100,7 @@ qfhtrbm_scalar <- function(p, x0, nu, kappa, sigma,
 #'
 #' @param p        vector of probabilities
 #' @export
-qfhtrbm <- Vectorize(FUN = qfhtrbm_scalar)
+qfhtrbm <- Vectorize(FUN = qfhtrbm_scalar, vectorize.args = "p")
 
 
 #' @rdname FHTRBM

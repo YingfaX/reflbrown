@@ -10,15 +10,16 @@ simData(
   X,
   sigmaCoef,
   kappaCoef,
-  theta,
   gamma,
   x0,
   nu,
+  theta = NULL,
   sigmaZ = NULL,
   kappaZ = NULL,
   roundTime = TRUE,
   gapTime = FALSE,
-  event_num = 500
+  event_num = 500,
+  FrailtyZ = FALSE
 )
 }
 \arguments{
@@ -37,9 +38,6 @@ This argument should be a numeric vector.}
 \item{kappaCoef}{The coefficents of upper reflection barrier.
 This argument should be a numeric vector.}
 
-\item{theta}{The variance of frailties.
-This argument should be a numeric vector with length $2$.}
-
 \item{gamma}{The coefficient of frailty.
 This argument should be a numeric value.}
 
@@ -48,6 +46,9 @@ This argument should be a numeric value.}
 
 \item{nu}{The lower boundary of the reflected Brownian motion.
 This argument should be a numeric value.}
+
+\item{theta}{The variance of frailties.
+This argument should be a numeric vector with length $2$.}
 
 \item{sigmaZ}{The frailty in sigma, default is NULL.
 This argument should be a numeric vector.}
@@ -64,6 +65,8 @@ to return the generated gap times or calender time.}
 \item{event_num}{The number of simulated random gap times for one patients.
 Only the cumulative random gap times smaller the follow up time are
 saved as output. This argument should be a numeric value.}
+
+\item{FrailtyZ}{Report frailty in the output dataframe or not. Default is False.}
 }
 \description{
 The function simData generates simulated recurrent events from
@@ -79,10 +82,10 @@ simuDat <- simData(size = size,
                    X = cbind(Intercept, as.matrix(simuCovDat[, c("x1", "x2")])),
                    sigmaCoef = c(0.9, -0.2, -0.1),
                    kappaCoef = c(2.9, 0.2, -0.1),
-                   theta = c(0.2, 0.3),
                    gamma = -0.4,
                    x0 = 10,
-                   nu = 3.9)
+                   nu = 3.9,
+                   theta = c(0.2, 0.3))
 
 head(simuDat)
 
