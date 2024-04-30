@@ -3,8 +3,8 @@ citHeader("To cite reflbrown in publications use:")
 bibentry(
     key = "reflbrown-package",
     bibtype = "Manual",
-    title = "{reflbrown}: {R}eflected Brownian Motion for Recurrent Event
-             Modeling",
+    title = "{reflbrown}: {R}ecurrent Event Modeling based on First Hitting Time
+    of {R}eflected Brownian Motion",
     author = personList(as.person("Yingfa Xie"),
                         as.person("Jun Yan")),
     year = "2024",
