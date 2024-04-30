@@ -19,5 +19,6 @@ Brownian motion;
     author = {Yingfa Xie and Jun Yan},
     year = {2024},
     url = {https://github.com/YingfaX/reflbrown},
+    note = {{R} package version 0.1.0}
   }
 ```

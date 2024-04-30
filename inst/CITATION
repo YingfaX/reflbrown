@@ -8,5 +8,6 @@ bibentry(
     author = personList(as.person("Yingfa Xie"),
                         as.person("Jun Yan")),
     year = "2024",
-    url = "https://github.com/YingfaX/reflbrown"
+    url = "https://github.com/YingfaX/reflbrown",
+    note =	 "{R} package version 0.1.0"
 )
