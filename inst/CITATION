@@ -1,0 +1,12 @@
+citHeader("To cite reflbrown in publications use:")
+
+bibentry(
+    key = "reflbrown-package",
+    bibtype = "Manual",
+    title = "{reflbrown}: {R}eflected Brownian Motion for Recurrent Event
+             Modeling",
+    author = personList(as.person("Yingfa Xie"),
+                        as.person("Jun Yan")),
+    year = "2024",
+    url = "https://github.com/YingfaX/reflbrown"
+)

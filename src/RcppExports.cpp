@@ -78,24 +78,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// pfhtrbm_c_db
-double pfhtrbm_c_db(double t, double x0, double nu, double kappa, double sigma);
-RcppExport SEXP _reflbrown_pfhtrbm_c_db(SEXP tSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type t(tSEXP);
-    Rcpp::traits::input_parameter< double >::type x0(x0SEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    rcpp_result_gen = Rcpp::wrap(pfhtrbm_c_db(t, x0, nu, kappa, sigma));
-    return rcpp_result_gen;
-END_RCPP
-}
-// lklhSubj
-double lklhSubj(NumericVector t, NumericVector event, double x0, double nu, double kappa, double sigma);
-RcppExport SEXP _reflbrown_lklhSubj(SEXP tSEXP, SEXP eventSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
+// lklhSubj_intv
+double lklhSubj_intv(NumericVector t, NumericVector event, double x0, double nu, double kappa, double sigma);
+RcppExport SEXP _reflbrown_lklhSubj_intv(SEXP tSEXP, SEXP eventSEXP, SEXP x0SEXP, SEXP nuSEXP, SEXP kappaSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -105,7 +90,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
     Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
     Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    rcpp_result_gen = Rcpp::wrap(lklhSubj(t, event, x0, nu, kappa, sigma));
+    rcpp_result_gen = Rcpp::wrap(lklhSubj_intv(t, event, x0, nu, kappa, sigma));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -153,8 +138,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_reflbrown_pfhtrbm_c", (DL_FUNC) &_reflbrown_pfhtrbm_c, 5},
     {"_reflbrown_solveQuad", (DL_FUNC) &_reflbrown_solveQuad, 4},
     {"_reflbrown_rfhtrbm_c", (DL_FUNC) &_reflbrown_rfhtrbm_c, 13},
-    {"_reflbrown_pfhtrbm_c_db", (DL_FUNC) &_reflbrown_pfhtrbm_c_db, 5},
-    {"_reflbrown_lklhSubj", (DL_FUNC) &_reflbrown_lklhSubj, 6},
+    {"_reflbrown_lklhSubj_intv", (DL_FUNC) &_reflbrown_lklhSubj_intv, 6},
     {"_reflbrown_obsLklh_c", (DL_FUNC) &_reflbrown_obsLklh_c, 13},
     {"_reflbrown_simPath_c", (DL_FUNC) &_reflbrown_simPath_c, 5},
     {NULL, NULL, 0}

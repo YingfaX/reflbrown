@@ -17,12 +17,8 @@ rfhtrbm_c <- function(n, x0, nu, kappa, sigma, k, lambda_1, t_point, slopes, int
     .Call(`_reflbrown_rfhtrbm_c`, n, x0, nu, kappa, sigma, k, lambda_1, t_point, slopes, intercepts, M, I, pt_point)
 }
 
-pfhtrbm_c_db <- function(t, x0, nu, kappa, sigma) {
-    .Call(`_reflbrown_pfhtrbm_c_db`, t, x0, nu, kappa, sigma)
-}
-
-lklhSubj <- function(t, event, x0, nu, kappa, sigma) {
-    .Call(`_reflbrown_lklhSubj`, t, event, x0, nu, kappa, sigma)
+lklhSubj_intv <- function(t, event, x0, nu, kappa, sigma) {
+    .Call(`_reflbrown_lklhSubj_intv`, t, event, x0, nu, kappa, sigma)
 }
 
 obsLklh_c <- function(t, event, covar_sigma, covar_kappa, mcmc_sigma, mcmc_kappa, mcmc_gamma, mcmc_theta, mc_z1, mc_z2, frailty, x0, nu) {
