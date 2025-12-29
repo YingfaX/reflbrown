@@ -28,9 +28,18 @@ install.packages(c(
 
 ### Installation
 
-User could download the package and install with 
-- install.packages("reflbrown_0.1.0.tar.gz", repos = NULL, type = "source")
 
+User can install from the Github
+
+```r
+install.packages("remotes")
+remotes::install_github("YingfaX/reflbrown")
+```
+
+Or download the package and install with 
+```r 
+install.packages("reflbrown_0.1.0.tar.gz", repos = NULL, type = "source")
+```
 
 ## Citation
 

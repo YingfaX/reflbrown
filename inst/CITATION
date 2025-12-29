@@ -1,18 +1,6 @@
 citHeader("To cite reflbrown in publications use:")
 
 bibentry(
-    bibtype      = "Misc",
-    key          = "reflbrown-package",
-    title        = "{reflbrown}: {R}ecurrent Event Modeling based on First Hitting Time
-                    of {R}eflected Brownian Motion",
-    author       = c(person("Yingfa Xie"),
-                 person("Jun Yan")),
-    year         = "2024",
-    howpublished = "https://github.com/YingfaX/reflbrown",
-    note         = "{R} package version 0.1.0"
-)
-
-bibentry(
     bibtype   = "Article",
     key       = "xie2025recurrent",
     title     = "{R}ecurrent events modeling based on a reflected {B}rownian
@@ -29,3 +17,17 @@ bibentry(
     year      = "2025",
     publisher = "Oxford University Press"
 )
+
+bibentry(
+    bibtype      = "Misc",
+    key          = "reflbrown-package",
+    title        = "{reflbrown}: {R}ecurrent Event Modeling based on First Hitting Time
+                    of {R}eflected Brownian Motion",
+    author       = c(person("Yingfa Xie"),
+                 person("Jun Yan")),
+    year         = "2024",
+    howpublished = "https://github.com/YingfaX/reflbrown",
+    note         = "{R} package version 0.1.0"
+)
+
+
