@@ -46,17 +46,6 @@ install.packages("reflbrown_0.1.0.tar.gz", repos = NULL, type = "source")
 **BibTeX Entry:**
 
 ``` bibtex
-@misc{reflbrown-package,
-    title = {{reflbrown}: {R}ecurrent Event Modeling based on the First Hitting Time
-    of {R}eflected Brownian Motion},
-    author = {Yingfa Xie and Jun Yan},
-    year = {2024},
-    howpublished = {https://github.com/YingfaX/reflbrown},
-    note = {{R} package version 0.1.0}
-  }
-```
-
-``` bibtex
 @article{xie2025recurrent,
   title={Recurrent events modeling based on a reflected Brownian motion with application to hypoglycemia},
   author={Xie, Yingfa and Fu, Haoda and Huang, Yuan and Pozdnyakov, Vladimir and Yan, Jun},
@@ -68,3 +57,15 @@ install.packages("reflbrown_0.1.0.tar.gz", repos = NULL, type = "source")
   publisher={Oxford University Press}
 }
 ```
+
+``` bibtex
+@misc{reflbrown-package,
+    title = {{reflbrown}: {R}ecurrent Event Modeling based on the First Hitting Time
+    of {R}eflected Brownian Motion},
+    author = {Yingfa Xie and Jun Yan},
+    year = {2024},
+    howpublished = {https://github.com/YingfaX/reflbrown},
+    note = {{R} package version 0.1.0}
+  }
+```
+
